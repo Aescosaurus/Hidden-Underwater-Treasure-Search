@@ -1,2 +1,2 @@
-# Diving-Exploration-Game
-A game about diving and exploring.
+# Diving Exploration Game
+Explore the depths and uncover deep sea treasure!
