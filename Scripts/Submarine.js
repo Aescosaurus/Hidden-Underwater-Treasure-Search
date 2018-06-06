@@ -34,6 +34,4 @@ function Submarine( x,y )
 	{
 		gfx.DrawRect( pos,size,"red" );
 	}
-	// 
-	return( this );
 }
