@@ -7,7 +7,7 @@ const kbd = new Keyboard();
 const ms = new Mouse();
 const sfx = new Sound();
 
-const sub = new Submarine( 60,60 );
+const sub = new Submarine( 60,60,gfx );
 const world = new Map();
 
 window.onload = function()
@@ -34,12 +34,16 @@ function Update()
 {
 	// Update below.
 	sub.Update( kbd );
-	world.Update( Vec2( 0,0 ) );
+	const moveAmount = sub.GetDelta();
+	
+	world.Update( moveAmount );
+	
+	sub.ResetDelta();
 }
 
 function Draw()
 {
-	gfx.DrawRect( Vec2( 0,0 ),gfx.ScreenSize,"black" );
+	gfx.DrawRect( Vec2( 0,0 ),gfx.ScreenSize,"#48A" );
 	// Draw below.
 	world.Draw( gfx );
 	sub.Draw( gfx );

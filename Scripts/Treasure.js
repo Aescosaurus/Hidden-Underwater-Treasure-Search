@@ -11,6 +11,7 @@ function Treasure( x,y,price )
 	
 	this.Draw=( gfx )=>
 	{
-		gfx.DrawImage( image,pos );
+		// gfx.DrawImage( image,pos );
+		gfx.DrawRect( pos,Vec2( 32,32 ),"gold" );
 	}
 }
