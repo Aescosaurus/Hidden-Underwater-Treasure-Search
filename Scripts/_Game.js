@@ -10,6 +10,8 @@ const sfx = new Sound();
 const sub = new Submarine( 60,60,gfx );
 const world = new Map();
 
+let gold = 0;
+
 window.onload = function()
 {
 	Start();
@@ -27,18 +29,27 @@ function Start()
 	ms.Start( gfx.GetCanvas() );
 	gfx.Start();
 	// Initialize below!
-	world.InitWorld( MainMap.Data );
+	world.InitWorld( MainMap.Data.Terrain,
+		MainMap.Data.Treasures );
 }
 
 function Update()
 {
 	// Update below.
 	sub.Update( kbd );
-	const moveAmount = sub.GetDelta();
 	
-	world.Update( moveAmount );
+	world.Update( sub.GetDelta() );
+	
+	if( sub.CheckGroundHits( world.GetTerrainRects() ) )
+	{
+		world.Update( sub.GetDelta() );
+	}
 	
 	sub.ResetDelta();
+	
+	gold += sub.CheckTreasureHits( world.GetTreasures() );
+	
+	console.log( gold );
 }
 
 function Draw()
@@ -47,5 +58,12 @@ function Draw()
 	// Draw below.
 	world.Draw( gfx );
 	sub.Draw( gfx );
+	
+	// for( var i in world.GetTerrainRects() )
+	// {
+	// 	const x = world.GetTerrainRects()[i];
+	// 	gfx.DrawRect( Vec2( x.x,x.y ),
+	// 		Vec2( x.width,x.height ),"orange" );
+	// }
 }
 })();

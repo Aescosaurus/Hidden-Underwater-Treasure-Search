@@ -40,6 +40,47 @@ function Submarine( x,y,gfx )
 		gfx.DrawImage( image,pos,size );
 	}
 	
+	this.CheckGroundHits=( groundArr )=>
+	{
+		let hitGround = false;
+		const hitbox = this.GetRect();
+		for( var i in groundArr )
+		{
+			const curGround = groundArr[i];
+			
+			if( curGround.Overlaps( hitbox ) )
+			{
+				moveAmount.Subtract( vel
+					.GetMultiplied( 3 ) );
+				
+				vel.Multiply( -1 );
+				
+				hitGround = true;
+			}
+		}
+		
+		return( hitGround );
+	}
+	
+	this.CheckTreasureHits=( treasures )=>
+	{
+		let score = 0;
+		
+		const hitbox = this.GetRect();
+		
+		for( var i in treasures )
+		{
+			const curTreasure = treasures[i];
+			
+			if( curTreasure.GetRect().Overlaps( hitbox ) )
+			{
+				score += curTreasure.Collect();
+			}
+		}
+		
+		return( score );
+	}
+	
 	this.ResetDelta=()=>
 	{
 		moveAmount.x = 0.0;
@@ -49,5 +90,10 @@ function Submarine( x,y,gfx )
 	this.GetDelta=()=>
 	{
 		return( moveAmount.GetMultiplied( -1 ) );
+	}
+	
+	this.GetRect=()=>
+	{
+		return( Rect( pos.x,pos.y,size.x,size.y ) );
 	}
 }

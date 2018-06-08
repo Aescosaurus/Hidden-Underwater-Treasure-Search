@@ -15,4 +15,9 @@ function Terrain( area )
 		// gfx.DrawImage( image,pos );
 		gfx.DrawRect( pos,size,"gray" );
 	}
+	
+	this.GetRect=()=>
+	{
+		return( Rect( pos.x,pos.y,size.x,size.y ) );
+	}
 }
