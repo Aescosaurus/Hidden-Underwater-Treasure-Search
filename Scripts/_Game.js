@@ -30,7 +30,8 @@ function Start()
 	gfx.Start();
 	// Initialize below!
 	world.InitWorld( MainMap.Data.Terrain,
-		MainMap.Data.Treasures );
+		MainMap.Data.Treasures,
+		MainMap.Data.Enemies );
 }
 
 function Update()
@@ -45,11 +46,16 @@ function Update()
 		world.Update( sub.GetDelta() );
 	}
 	
+	if( sub.CheckEnemyHits( world.GetEnemies() ) )
+	{
+		world.Update( sub.GetDelta() );
+	}
+	
 	sub.ResetDelta();
 	
 	gold += sub.CheckTreasureHits( world.GetTreasures() );
 	
-	console.log( gold );
+	// console.log( gold );
 }
 
 function Draw()
@@ -58,6 +64,9 @@ function Draw()
 	// Draw below.
 	world.Draw( gfx );
 	sub.Draw( gfx );
+	
+	gfx.DrawText( Vec2( 5,30 ),"25PX Lucida Console",
+		"gold",gold );
 	
 	// for( var i in world.GetTerrainRects() )
 	// {

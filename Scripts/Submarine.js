@@ -1,5 +1,13 @@
 function Submarine( x,y,gfx )
 {
+	const ReverseVel=()=>
+	{
+		moveAmount.Subtract( vel
+			.GetMultiplied( 3 ) );
+		
+		vel.Multiply( -1 );
+	}
+	// 
 	const ctrls = {
 		Up: 'W',
 		Down: 'S',
@@ -50,12 +58,10 @@ function Submarine( x,y,gfx )
 			
 			if( curGround.Overlaps( hitbox ) )
 			{
-				moveAmount.Subtract( vel
-					.GetMultiplied( 3 ) );
-				
-				vel.Multiply( -1 );
+				ReverseVel();
 				
 				hitGround = true;
+				break;
 			}
 		}
 		
@@ -79,6 +85,26 @@ function Submarine( x,y,gfx )
 		}
 		
 		return( score );
+	}
+	
+	this.CheckEnemyHits=( enemies )=>
+	{
+		let hasHit = false;
+		
+		for( var i in enemies )
+		{
+			const e = enemies[i];
+			const hitbox = this.GetRect();
+			
+			if( e.GetRect().Overlaps( hitbox ) )
+			{
+				ReverseVel();
+				hasHit = true;
+				break;
+			}
+		}
+		
+		return( hasHit );
 	}
 	
 	this.ResetDelta=()=>

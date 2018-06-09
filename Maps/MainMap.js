@@ -10,7 +10,11 @@ MainMap.Data = {
 	Treasures:
 	[
 		new Treasure( 450,450,10 ),
-		new Treasure( 500,450,15 ),
+		new Treasure( 500,450,10 ),
 		new Treasure( 550,450,10 )
+	],
+	Enemies:
+	[
+		new Fish( 450,200 )
 	]
 };

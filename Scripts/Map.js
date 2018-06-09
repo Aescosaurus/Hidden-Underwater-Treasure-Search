@@ -2,32 +2,39 @@ function Map()
 {
 	const terrain = [];
 	const treasures = [];
+	const enemies = [];
 	// 
-	this.InitWorld=( worldArr,treasArr )=>
+	this.InitWorld=( worldArr,treasArr,enemyArr )=>
 	{
-		for( var i in worldArr )
+		for( var w in worldArr )
 		{
-			terrain.push( worldArr[i] );
+			terrain.push( worldArr[w] );
 		}
 		
-		for( var i in treasArr )
+		for( var t in treasArr )
 		{
-			treasures.push( treasArr[i] );
+			treasures.push( treasArr[t] );
+		}
+		
+		for( var e in enemyArr )
+		{
+			enemies.push( enemyArr[e] );
 		}
 	}
 	
 	this.Update=( moveAmount )=>
 	{
-		for( var t in terrain )
+		for( var ter in terrain )
 		{
-			terrain[t].Update( moveAmount );
+			terrain[ter].Update( moveAmount );
 		}
 		
-		for( var t in treasures )
+		for( var tr in treasures )
 		{
-			treasures[t].Update( moveAmount );
+			treasures[tr].Update( moveAmount );
 		}
 		
+		// TODO: Optimize this somehow.
 		for( var t in treasures )
 		{
 			if( treasures[t].WillRemove() )
@@ -35,18 +42,30 @@ function Map()
 				treasures.splice( t,1 );
 			}
 		}
+		
+		for( var e in enemies )
+		{
+			enemies[e].Update();
+			
+			enemies[e].MoveBy( moveAmount );
+		}
 	}
 	
 	this.Draw=( gfx )=>
 	{
-		for( var t in terrain )
+		for( var ter in terrain )
 		{
-			terrain[t].Draw( gfx );
+			terrain[ter].Draw( gfx );
 		}
 		
-		for( var t in treasures )
+		for( var tr in treasures )
 		{
-			treasures[t].Draw( gfx );
+			treasures[tr].Draw( gfx );
+		}
+		
+		for( var e in enemies )
+		{
+			enemies[e].Draw( gfx );
 		}
 	}
 	
@@ -65,5 +84,10 @@ function Map()
 	this.GetTreasures=()=>
 	{
 		return( treasures );
+	}
+	
+	this.GetEnemies=()=>
+	{
+		return( enemies );
 	}
 }
