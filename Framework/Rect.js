@@ -8,7 +8,7 @@ function Rect_( x,y,w,h )
 	this.Contains=( pos )=>
 	{
 		return( pos.x > this.x && pos.x < this.x + this.width &&
-		        pos.y > this.y && pos.y < this.y + this.height );
+			pos.y > this.y && pos.y < this.y + this.height );
 	}
 	
 	this.IsContainedBy=( other )=>
@@ -20,7 +20,7 @@ function Rect_( x,y,w,h )
 	this.Overlaps=( other )=>
 	{
 		return ( other.x < this.x + this.width && other.x + other.width > this.x &&
-		         other.y < this.y + this.height && other.y + other.height > this.y );
+			other.y < this.y + this.height && other.y + other.height > this.y );
 	}
 	
 	this.MoveBy=( amount )=>

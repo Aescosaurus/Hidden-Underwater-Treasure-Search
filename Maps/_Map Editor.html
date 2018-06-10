@@ -1,0 +1,449 @@
+<html>
+<head>
+	<title>Map Editor</title>
+</head>
+<body>
+	<canvas id="gc" width="720" height="480"></canvas>
+	
+	<script src="../Framework/Vec2.js"></script>
+	
+	<script>
+	const c = document.getElementById( "gc" );
+	const cc = c.getContext( "2d" );
+	
+	const keyMap = [];
+	
+	let mouseDown = false;
+	const mousePos = Vec2( 0,0 );
+	const msPos = Vec2( 0,0 );
+	const gridSize = 16;
+	
+	const treasureSize = 32;
+	const enemySize = 64;
+	
+	const terrain = [];
+	const treasures = [];
+	const enemies = [];
+	
+	let canExport = true;
+	let canClick = false;
+	let canBracket = false;
+	let terrainLevel = 1;
+	let treasureLevel = 10;
+	let enemyLevel = 1;
+	
+	let tempStart = Vec2( 0,0 );
+	
+	const moveOffset = Vec2( 0,0 );
+	
+	let mode = "terrain";
+	
+	const startPos = Vec2( c.width / 2,c.height / 2 );
+	
+	window.onload=()=>
+	{
+		function Log( x ) { console.log( x ); }
+		Log( "Controls:\n---------" );
+		Log( "WASD/Arrow Keys: Move around the world." );
+		Log( "Q: Download map data." );
+		Log( "E: Eraser." );
+		Log( "Z: Terrain brush." );
+		Log( "X: Treasure placer." );
+		Log( "C: Enemy placer." );
+		c.addEventListener( "mousedown",() =>
+		{
+			mouseDown = true;
+		} );
+		
+		c.addEventListener( "mouseup",() =>
+		{
+			mouseDown = false;
+		} );
+		
+		c.addEventListener( "mousemove",( e ) =>
+		{
+			const rect = c.getBoundingClientRect();
+			const root = document.documentElement;
+			mousePos.x = e.clientX - rect.left - root.scrollLeft;
+			mousePos.y = e.clientY - rect.top - root.scrollTop;
+		} );
+		
+		onkeydown = onkeyup=( e )=>
+		{
+			keyMap[e.keyCode] = ( e.type == 'keydown' );
+		}
+		
+		setInterval( ()=>
+		{
+			Update();
+			Draw();
+		},1000 / 30 );
+	}
+	
+	function Update()
+	{
+		{
+			const temp = mousePos.Clone();
+			temp.x = Math.floor( temp.x );
+			temp.y = Math.floor( temp.y );
+			while( temp.x % gridSize != 0 ) --temp.x;
+			while( temp.y % gridSize != 0 ) --temp.y;
+			msPos.x = temp.x;
+			msPos.y = temp.y;
+		}
+		
+		if( !mouseDown )
+		{
+			canClick = true;
+		}
+		
+		if( keyMap[90] )
+		{
+			mode = "terrain";
+			console.log( "Terrain Mode" );
+		}
+		else if( keyMap[88] )
+		{
+			mode = "treasure";
+			console.log( "Treasure Mode" );
+		}
+		else if( keyMap[67] )
+		{
+			mode = "enemy";
+			console.log( "Enemy Mode" );
+		}
+		else if( keyMap[69] )
+		{
+			mode = "erase";
+			console.log( "Erase Mode" );
+		}
+		else if( keyMap[81] && canExport )
+		{
+			canExport = false;
+			Export();
+			setTimeout( ()=>{ canExport = true; },1000 );
+		}
+		
+		if( !keyMap[219] && !keyMap[221] )
+		{
+			canBracket = true;
+		}
+		
+		if( keyMap[219] && canBracket )
+		{
+			canBracket = false;
+			
+			if( mode == "terrain" )
+			{
+				--terrainLevel;
+				console.log( "Terrain level--, New: " + terrainLevel );
+			}
+			else if( mode == "treasure" )
+			{
+				--treasureLevel;
+				console.log( "Treasure level--, New: " + treasureLevel );
+			}
+			else if( mode == "enemy" )
+			{
+				--enemyLevel;
+				console.log( "Enemy level--, New: " + enemyLevel );
+			}
+		}
+		else if( keyMap[221] && canBracket )
+		{
+			canBracket = false;
+			
+			if( mode == "terrain" )
+			{
+				++terrainLevel;
+				console.log( "Terrain level++, New: " + terrainLevel );
+			}
+			else if( mode == "treasure" )
+			{
+				++treasureLevel;
+				console.log( "Treasure level++, New: " + treasureLevel );
+			}
+			else if( mode == "enemy" )
+			{
+				++enemyLevel;
+				console.log( "Enemy level++, New: " + enemyLevel );
+			}
+		}
+		
+		{
+			const origOffset = moveOffset.Clone();
+			const speed = gridSize;
+			
+			if( keyMap[38] || keyMap[87] )
+			{
+				moveOffset.y -= speed;
+			}
+			if( keyMap[40] || keyMap[83] )
+			{
+				moveOffset.y += speed;
+			}
+			if( keyMap[37] || keyMap[65] )
+			{
+				moveOffset.x -= speed;
+			}
+			if( keyMap[39] || keyMap[68] )
+			{
+				moveOffset.x += speed;
+			}
+			
+			if( mouseDown && !tempStart.Equals( Vec2( 0,0  ) ) )
+			{
+				tempStart.Subtract( moveOffset.GetSubtracted( origOffset ) );
+			}
+		}
+		
+		if( mode == "terrain" )
+		{
+			if( mouseDown )
+			{
+				if( tempStart.Equals( Vec2( 0,0 ) ) )
+				{
+					tempStart = msPos.Clone();
+				}
+			}
+			else if( !tempStart.Equals( Vec2( 0,0 ) ) )
+			{
+				const tempEnd = msPos.Clone();
+				if( tempStart.x > tempEnd.x )
+				{
+					const temp = tempStart.x;
+					tempStart.x = tempEnd.x;
+					tempEnd.x = temp;
+				}
+				if( tempStart.y > tempEnd.y )
+				{
+					const temp = tempStart.y;
+					tempStart.y = tempEnd.y;
+					tempEnd.y = temp;
+				}
+				const tempSize = tempEnd.GetSubtracted( tempStart );
+				
+				const tempRect = { x: tempStart.x + moveOffset.x,
+					y: tempStart.y + moveOffset.y,
+					w: tempSize.x,h: tempSize.y };
+				
+				terrain.push( tempRect );
+				
+				tempStart = Vec2( 0,0 );
+			}
+		}
+		else if( mode == "treasure" )
+		{
+			if( mouseDown && canClick )
+			{
+				treasures.push( { x: msPos.x + moveOffset.x - treasureSize / 2,
+					y: msPos.y + moveOffset.y - treasureSize / 2,
+					val: treasureLevel } );
+				
+				canClick = false;
+			}
+		}
+		else if( mode == "enemy" )
+		{
+			if( mouseDown && canClick )
+			{
+				enemies.push( { x: msPos.x + moveOffset.x - enemySize / 2,
+					y: msPos.y + moveOffset.y - enemySize / 2,
+					lvl: enemyLevel } );
+				
+				canClick = false;
+			}
+		}
+		else if( mode == "erase" )
+		{
+			function ContainsPoint( x,y,w,h,point )
+			{
+				const p = point.Clone();
+				p.Add( moveOffset );
+				// x += moveOffset.x;
+				// y += moveOffset.y;
+				return( p.x >= x && p.x <= x + w &&
+					p.y >= y && p.y <= y + h );
+			}
+			if( mouseDown && canClick )
+			{
+				canClick = false;
+				
+				for( var x in terrain )
+				{
+					const t = terrain[x];
+					if( ContainsPoint( t.x,t.y,t.w,t.h,msPos ) )
+					{
+						terrain.splice( x,1 );
+						return; // Yes, use return not break here.
+					}
+				}
+				
+				for( var y in treasures )
+				{
+					const t = treasures[y];
+					if( ContainsPoint( t.x,t.y,treasureSize,treasureSize,msPos ) )
+					{
+						treasures.splice( y,1 );
+						return;
+					}
+				}
+				
+				for( var z in enemies )
+				{
+					const e = enemies[z];
+					if( ContainsPoint( e.x,e.y,enemySize,enemySize,msPos ) )
+					{
+						enemies.splice( z,1 );
+						return;
+					}
+				}
+			}
+		}
+	}
+	
+	function Draw()
+	{
+		cc.fillStyle = "black";
+		cc.fillRect( 0,0,c.width,c.height );
+		
+		// cc.strokeStyle = "green";
+		// cc.lineWidth = "3";
+		// cc.moveTo( -moveOffset.x,-moveOffset.y );
+		// cc.lineTo( c.width - moveOffset.x,-moveOffset.y );
+		// cc.stroke();
+		{
+			const temp = moveOffset.Clone();
+			if( temp.x > c.width ) temp.x -= c.width;
+			if( temp.x < -c.width ) temp.x += c.width;
+			if( temp.y > c.height ) temp.y -= c.height;
+			if( temp.y < -c.height ) temp.y += c.height;
+			
+			const size = 2;
+			
+			const topLeft = Vec2( -temp.x,-temp.y );
+			const botRight = Vec2( c.width,c.height );
+			cc.fillStyle = "green";
+			cc.fillRect( topLeft.x - size / 2,0 - size / 2,size,botRight.y ); // Left.
+			cc.fillRect( botRight.x + topLeft.x - size / 2,0 - size / 2,size,botRight.y ); // Right.
+			cc.fillRect( 0 - size / 2,topLeft.y - size / 2,botRight.x,size ); // Top.
+			cc.fillRect( 0 - size / 2,botRight.y + topLeft.y - size / 2,botRight.x,size ); // Bot.
+		}
+		
+		cc.fillStyle = "gray";
+		for( var t in terrain )
+		{
+			const te = terrain[t];
+			cc.fillRect( te.x - moveOffset.x,
+				te.y - moveOffset.y,
+				te.w,te.h );
+			
+			if( te.w < 1 || te.h < 1 )
+			{
+				terrain.splice( t,1 );
+				break;
+			}
+			
+		}
+		
+		cc.fillStyle = "gold";
+		for( var tre in treasures )
+		{
+			const trs = treasures[tre];
+			cc.fillRect( trs.x - moveOffset.x,
+				trs.y - moveOffset.y,
+				treasureSize,treasureSize );
+		}
+		
+		cc.fillStyle = "red";
+		for( var e in enemies )
+		{
+			const en = enemies[e];
+			
+			cc.fillRect( en.x - moveOffset.x,
+				en.y - moveOffset.y,
+				enemySize,enemySize );
+		}
+		
+		if( mouseDown && mode == "terrain" )
+		{
+			const size = msPos.GetSubtracted( tempStart );
+			cc.fillStyle = "gray";
+			cc.fillRect( tempStart.x,tempStart.y,
+				size.x,size.y );
+		}
+		
+		{
+			const size = 16;
+			cc.fillStyle = "yellow";
+			cc.fillRect( startPos.x - size / 2 - moveOffset.x,
+				startPos.y - size / 2 - moveOffset.y,
+				size,size );
+		}
+		
+		{
+			const size = 4;
+			cc.fillStyle = "white";
+			cc.fillRect( msPos.x - size / 2,msPos.y - size / 2,
+				size,size );
+		}
+	}
+	
+	function Export()
+	{
+		let text = "function MainMap()\n{}\n\n";
+		function AddText( str,indt = 0 )
+		{
+			for( var i = 0; i < indt; ++i ) text += "\t";
+			text += str + "\n";
+		}
+		
+		AddText( "MainMap.Data = {" );
+		AddText( "Terrain:",1 );
+		AddText( "[",1 );
+		for( var t in terrain )
+		{
+			const ter = terrain[t];
+			AddText( "new Terrain( Rect( " + ter.x + "," + ter.y +
+				"," + ter.w + "," + ter.h + " ) ),",2 );
+		}
+		AddText( "],",1 );
+		AddText( "Treasures:",1 );
+		AddText( "[",1 );
+		// AddText( "new Treasure( 450,450,10 )" );
+		for( var tr in treasures )
+		{
+			const tre = treasures[tr];
+			AddText( "new Treasure( " + tre.x + "," +
+				tre.y + "," + tre.val + " ),",2 );
+		}
+		AddText( "],",1 );
+		AddText( "Enemies:",1 );
+		AddText( "[",1 );
+		// AddText( "new Fish( 450,200 )" );
+		for( var e in enemies )
+		{
+			const en = enemies[e];
+			let enemyType = "";
+			if( en.lvl == 1 )
+			{
+				enemyType = "Fish";
+			}
+			AddText( "new " + enemyType + "( " + en.x + "," + en.y + " ),",2 );
+		}
+		AddText( "]",1 );
+		AddText( "};" );
+		
+		let a = window.document.createElement( "a" );
+		a.href = window.URL
+			.createObjectURL( new Blob( [text],{ type: "text/csv" } ) );
+		a.download = "MainMap.js";
+		
+		document.body.appendChild( a );
+		a.click();
+		
+		document.body.removeChild( a )
+	}
+	</script>
+</body>
+</html>
