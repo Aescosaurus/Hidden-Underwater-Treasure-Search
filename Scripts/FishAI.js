@@ -20,3 +20,24 @@ FishAI.Float = function()
 		pos.Add( temp );
 	}
 }
+
+FishAI.Patrol = function( speed = 2,dist = 70 )
+{
+	const spd = speed;
+	const moveDist = dist;
+	let startPos = Vec2( -9999,-9999 );
+	let dir = -1;
+	this.Go=( pos,moveAmount )=>
+	{
+		startPos.Add( moveAmount );
+		if( startPos.Equals( Vec2( -9999,-9999 ) ) )
+		{
+			startPos = pos.Clone();
+		}
+		
+		pos.x += dir * spd;
+		
+		if( pos.x > startPos.x + moveDist ) dir = -1;
+		else if( pos.x < startPos.x - moveDist ) dir = 1;
+	}
+}

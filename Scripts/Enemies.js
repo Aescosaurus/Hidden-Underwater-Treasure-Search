@@ -4,10 +4,11 @@ function Enemy( x,y,ai )
 	const size = Vec2( 64,64 );
 	const pos = Vec2( x,y );
 	const myAI = ai;
+	let moveAmount = Vec2( 0,0 );
 	// 
 	this.Update=()=>
 	{
-		ai.Go( pos );
+		ai.Go( pos,moveAmount );
 	}
 	
 	this.Draw=( gfx )=>
@@ -17,6 +18,7 @@ function Enemy( x,y,ai )
 	
 	this.MoveBy=( amount )=>
 	{
+		moveAmount = amount;
 		pos.Add( amount );
 	}
 	
@@ -29,5 +31,5 @@ function Enemy( x,y,ai )
 
 function Fish( x,y )
 {
-	Enemy.call( this,x,y,new FishAI.Float() );
+	Enemy.call( this,x,y,new FishAI.Patrol() );
 }
