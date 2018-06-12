@@ -65,7 +65,7 @@ function Draw()
 	world.Draw( gfx );
 	sub.Draw( gfx );
 	
-	gfx.DrawText( Vec2( 5,30 ),"25PX Lucida Console",
+	gfx.DrawText( Vec2( 115,25 ),"25PX Lucida Console",
 		"gold",gold );
 	
 	// for( var i in world.GetTerrainRects() )

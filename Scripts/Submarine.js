@@ -21,6 +21,9 @@ function Submarine( x,y,gfx )
 	const vel = Vec2( 0,0 );
 	const slowdown = 0.95;
 	const maxSpeed = 5.1;
+	const invul = new Timer( 36 );
+	let isInvul = false;
+	const hpBar = new HealthBar( 5,Vec2( 5,5 ) );
 	const image = gfx.LoadImage( "Images/Sub.png" );
 	// 
 	this.Update=( kbd )=>
@@ -40,12 +43,29 @@ function Submarine( x,y,gfx )
 		// pos.Add( vel );
 		moveAmount.Add( vel );
 		vel.Multiply( slowdown );
+		
+		if( isInvul )
+		{
+			invul.Update();
+			
+			if( invul.IsDone() )
+			{
+				invul.Reset();
+				isInvul = false;
+			}
+		}
 	}
 	
 	this.Draw=( gfx )=>
 	{
 		// gfx.DrawRect( pos,size,"red" );
+		if( isInvul )
+		{
+			gfx.DrawRect( pos,size,"blue" );
+		}
 		gfx.DrawImage( image,pos,size );
+		
+		hpBar.Draw( 100,20,gfx );
 	}
 	
 	this.CheckGroundHits=( groundArr )=>
@@ -64,6 +84,8 @@ function Submarine( x,y,gfx )
 				break;
 			}
 		}
+		
+		if( hitGround ) this.Hurt( 1 );
 		
 		return( hitGround );
 	}
@@ -96,12 +118,25 @@ function Submarine( x,y,gfx )
 			const e = enemies[i];
 			const hitbox = this.GetRect();
 			
+			while( e.GetRect().Overlaps( this.GetRect() ) )
+			{
+				const delta = e.GetPos()
+					.GetSubtracted( pos )
+					.GetNormalized();
+				
+				pos.Subtract( delta );
+			}
 			if( e.GetRect().Overlaps( hitbox ) )
 			{
 				ReverseVel();
 				hasHit = true;
 				break;
 			}
+		}
+		
+		if( hasHit )
+		{
+			this.Hurt( 1 );
 		}
 		
 		return( hasHit );
@@ -111,6 +146,15 @@ function Submarine( x,y,gfx )
 	{
 		moveAmount.x = 0.0;
 		moveAmount.y = 0.0;
+	}
+	
+	this.Hurt=( amount )=>
+	{
+		if( !isInvul )
+		{
+			hpBar.LoseHP( 1 );
+			isInvul = true;
+		}
 	}
 	
 	this.GetDelta=()=>
