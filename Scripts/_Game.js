@@ -29,9 +29,7 @@ function Start()
 	ms.Start( gfx.GetCanvas() );
 	gfx.Start();
 	// Initialize below!
-	world.InitWorld( MainMap.Data.Terrain,
-		MainMap.Data.Treasures,
-		MainMap.Data.Enemies );
+	world.InitWorld( gfx );
 }
 
 function Update()

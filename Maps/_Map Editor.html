@@ -391,34 +391,35 @@
 	
 	function Export()
 	{
-		let text = "function MainMap()\n{}\n\n";
+		// let text = "function MainMap()\n{}\n\n";
+		let text = "function MainMap( gfx )\n{\n";
 		function AddText( str,indt = 0 )
 		{
 			for( var i = 0; i < indt; ++i ) text += "\t";
 			text += str + "\n";
 		}
 		
-		AddText( "MainMap.Data = {" );
-		AddText( "Terrain:",1 );
+		// AddText( "MainMap.Data = {" );
+		AddText( "this.Terrain =",1 );
 		AddText( "[",1 );
 		for( var t in terrain )
 		{
 			const ter = terrain[t];
-			AddText( "new Terrain( Rect( " + ter.x + "," + ter.y +
+			AddText( "new Terrain( gfx,Rect( " + ter.x + "," + ter.y +
 				"," + ter.w + "," + ter.h + " ) ),",2 );
 		}
-		AddText( "],",1 );
-		AddText( "Treasures:",1 );
+		AddText( "];",1 );
+		AddText( "this.Treasures =",1 );
 		AddText( "[",1 );
 		// AddText( "new Treasure( 450,450,10 )" );
 		for( var tr in treasures )
 		{
 			const tre = treasures[tr];
-			AddText( "new Treasure( " + tre.x + "," +
+			AddText( "new Treasure( gfx," + tre.x + "," +
 				tre.y + "," + tre.val + " ),",2 );
 		}
-		AddText( "],",1 );
-		AddText( "Enemies:",1 );
+		AddText( "];",1 );
+		AddText( "this.Enemies =",1 );
 		AddText( "[",1 );
 		// AddText( "new Fish( 450,200 )" );
 		for( var e in enemies )

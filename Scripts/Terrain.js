@@ -1,5 +1,10 @@
-function Terrain( area )
+function Terrain( gfx,area,level = 1 )
 {
+	Terrain.prototype.images =
+	[
+		gfx.LoadImage( "Images/Tile1.png" )
+	];
+	Terrain.prototype.tileSize = 16;
 	const pos = Vec2( area.x,area.y );
 	const size = Vec2( area.width,area.height );
 	// TODO: Calculate image to use based on dims.
@@ -14,6 +19,18 @@ function Terrain( area )
 	{
 		// gfx.DrawImage( image,pos );
 		gfx.DrawRect( pos,size,"gray" );
+		// for( let y = pos.y;
+		// 	y < pos.y + size.y;
+		// 	pos.y += Terrain.prototype.tileSize )
+		// {
+		// 	for( let x = pos.x;
+		// 		x < pos.x + size.x;
+		// 		x += Terrain.prototype.tileSize )
+		// 	{
+		// 		gfx.DrawImage( Terrain.prototype.images[level - 1],
+		// 			Vec2( x,y ) );
+		// 	}
+		// }
 	}
 	
 	this.GetRect=()=>

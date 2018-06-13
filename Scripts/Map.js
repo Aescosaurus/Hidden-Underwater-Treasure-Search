@@ -4,8 +4,13 @@ function Map()
 	const treasures = [];
 	const enemies = [];
 	// 
-	this.InitWorld=( worldArr,treasArr,enemyArr )=>
+	this.InitWorld=( gfx )=>
 	{
+		const mm = new MainMap( gfx );
+		const worldArr = mm.Terrain;
+		const treasArr = mm.Treasures;
+		const enemyArr = mm.Enemies;
+		
 		for( var w in worldArr )
 		{
 			terrain.push( worldArr[w] );
