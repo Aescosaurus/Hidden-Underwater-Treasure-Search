@@ -28,6 +28,13 @@ function Submarine( x,y,gfx )
 	// 
 	this.Update=( kbd )=>
 	{
+		if( this.HasToSurface() )
+		{
+			const surfaceSpeed = 8;
+			pos.y -= surfaceSpeed;
+			moveAmount.Add( Vec2( 0,-surfaceSpeed ) );
+		}
+		
 		if( kbd.KeyDown( ctrls.Up ) ) --vel.y;
 		if( kbd.KeyDown( ctrls.Down ) ) ++vel.y;
 		if( kbd.KeyDown( ctrls.Left ) ) --vel.x;
@@ -39,7 +46,6 @@ function Submarine( x,y,gfx )
 		if( vel.y < -maxSpeed ) vel.y = -maxSpeed;
 		
 		if( vel.y < 0.0 ) vel.y += 0.2;
-		
 		// pos.Add( vel );
 		moveAmount.Add( vel );
 		vel.Multiply( slowdown );
@@ -152,7 +158,7 @@ function Submarine( x,y,gfx )
 	{
 		if( !isInvul )
 		{
-			hpBar.LoseHP( 1 );
+			hpBar.LoseHP( amount );
 			isInvul = true;
 		}
 	}
@@ -165,5 +171,10 @@ function Submarine( x,y,gfx )
 	this.GetRect=()=>
 	{
 		return( Rect( pos.x,pos.y,size.x,size.y ) );
+	}
+	
+	this.HasToSurface=()=>
+	{
+		return( hpBar.GetHP() < 1 );
 	}
 }

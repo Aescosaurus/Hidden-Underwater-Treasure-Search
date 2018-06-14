@@ -53,7 +53,10 @@ function Update()
 	
 	gold += sub.CheckTreasureHits( world.GetTreasures() );
 	
-	// console.log( gold );
+	if( kbd.KeyDown( ' ' ) )
+	{
+		sub.Hurt( 999 );
+	}
 }
 
 function Draw()

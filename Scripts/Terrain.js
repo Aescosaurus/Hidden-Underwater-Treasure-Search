@@ -28,7 +28,9 @@ function Terrain( gfx,area,level = 1 )
 		// 		x += Terrain.prototype.tileSize )
 		// 	{
 		// 		gfx.DrawImage( Terrain.prototype.images[level - 1],
-		// 			Vec2( x,y ) );
+		// 			Vec2( x,y ),Terrain.prototype.size );
+		// 		
+		// 		console.log( x + " " + y );
 		// 	}
 		// }
 	}
