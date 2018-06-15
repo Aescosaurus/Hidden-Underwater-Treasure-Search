@@ -9,8 +9,10 @@ const sfx = new Sound();
 
 const sub = new Submarine( 60,60,gfx );
 const world = new Map();
+const ct = new ColorTransformer();
 
 let gold = 0;
+let moveAmount = Vec2( 0,0 );
 
 window.onload = function()
 {
@@ -37,6 +39,8 @@ function Update()
 	// Update below.
 	sub.Update( kbd );
 	
+	moveAmount.Add( sub.GetDelta() );
+	
 	world.Update( sub.GetDelta() );
 	
 	if( sub.CheckGroundHits( world.GetTerrainRects() ) )
@@ -61,7 +65,10 @@ function Update()
 
 function Draw()
 {
-	gfx.DrawRect( Vec2( 0,0 ),gfx.ScreenSize,"#48A" );
+	gfx.DrawRect( Vec2( 0,0 ),gfx.ScreenSize,ct.Transform( "#269" ) );
+	gfx.DrawRect( Vec2( 0,moveAmount.y )
+		.GetSubtracted( Vec2( 0,gfx.ScreenHeight ) ),
+		gfx.ScreenSize,ct.Transform( "#48A" ) );
 	// Draw below.
 	world.Draw( gfx );
 	sub.Draw( gfx );

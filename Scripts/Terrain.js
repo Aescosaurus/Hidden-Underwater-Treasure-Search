@@ -17,8 +17,17 @@ function Terrain( gfx,area,level = 1 )
 	
 	this.Draw=( gfx )=>
 	{
-		// gfx.DrawImage( image,pos );
 		gfx.DrawRect( pos,size,"gray" );
+		
+		const tS = Terrain.prototype.tileSize;
+		for( let y = pos.y; y < pos.y + size.y - tS; y += tS * 2 )
+		{
+			for( let x = pos.x; x < pos.x + size.x - tS; x += tS * 2 )
+			{
+				gfx.DrawImage( Terrain.prototype.images[level - 1],
+					Vec2( x,y ),Vec2( tS * 2,tS * 2 )  );
+			}
+		}
 		// for( let y = pos.y;
 		// 	y < pos.y + size.y;
 		// 	pos.y += Terrain.prototype.tileSize )

@@ -2,38 +2,19 @@ function MainMap( gfx )
 {
 	this.Terrain =
 	[
-		new Terrain( gfx,Rect( -100,300,400,400 ) ),
-		new Terrain( gfx,Rect( 300,550,500,200 ) )
+		new Terrain( gfx,Rect( -288,64,288,544 ) ),
+		new Terrain( gfx,Rect( 0,320,320,288 ) ),
+		new Terrain( gfx,Rect( 320,448,224,512 ) ),
+		new Terrain( gfx,Rect( 544,800,608,160 ) ),
 	];
 	this.Treasures =
 	[
-		new Treasure( gfx,450,450,10 ),
-		new Treasure( gfx,540,450,10 ),
-		new Treasure( gfx,630,450,10 )
+		new Treasure( gfx,784,768,10 ),
+		new Treasure( gfx,848,768,10 ),
+		new Treasure( gfx,912,768,10 ),
 	];
 	this.Enemies =
 	[
-		new Fish( 450,200 )
+		new Fish( 832,640 ),
 	]
-}
-
-// function MainMap()
-// {}
-// 
-// MainMap.Data = {
-// 	Terrain:
-// 	[
-// 		new Terrain( Rect( -100,300,400,400 ) ),
-// 		new Terrain( Rect( 300,550,500,200 ) )
-// 	],
-// 	Treasures:
-// 	[
-// 		new Treasure( 450,450,10 ),
-// 		new Treasure( 540,450,10 ),
-// 		new Treasure( 630,450,10 )
-// 	],
-// 	Enemies:
-// 	[
-// 		new Fish( 450,200 )
-// 	]
-// };
+};

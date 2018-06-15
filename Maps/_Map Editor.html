@@ -78,6 +78,8 @@
 			Update();
 			Draw();
 		},1000 / 30 );
+		
+		mode = "terrain";
 	}
 	
 	function Update()
@@ -86,8 +88,10 @@
 			const temp = mousePos.Clone();
 			temp.x = Math.floor( temp.x );
 			temp.y = Math.floor( temp.y );
-			while( temp.x % gridSize != 0 ) --temp.x;
-			while( temp.y % gridSize != 0 ) --temp.y;
+			let gS = gridSize;
+			if( mode == "terrain" ) gS *= 2;
+			while( temp.x % gS != 0 ) --temp.x;
+			while( temp.y % gS != 0 ) --temp.y;
 			msPos.x = temp.x;
 			msPos.y = temp.y;
 		}
@@ -172,7 +176,8 @@
 		
 		{
 			const origOffset = moveOffset.Clone();
-			const speed = gridSize;
+			let speed = gridSize;
+			if( mode == "terrain" ) speed *= 2;
 			
 			if( keyMap[38] || keyMap[87] )
 			{
@@ -314,10 +319,10 @@
 		// cc.stroke();
 		{
 			const temp = moveOffset.Clone();
-			if( temp.x > c.width ) temp.x -= c.width;
-			if( temp.x < -c.width ) temp.x += c.width;
-			if( temp.y > c.height ) temp.y -= c.height;
-			if( temp.y < -c.height ) temp.y += c.height;
+			while( temp.x > c.width ) temp.x -= c.width;
+			while( temp.x < -c.width ) temp.x += c.width;
+			while( temp.y > c.height ) temp.y -= c.height;
+			while( temp.y < -c.height ) temp.y += c.height;
 			
 			const size = 2;
 			
@@ -330,17 +335,24 @@
 			cc.fillRect( 0 - size / 2,botRight.y + topLeft.y - size / 2,botRight.x,size ); // Bot.
 		}
 		
-		cc.fillStyle = "gray";
+		const edge = 2;
 		for( var t in terrain )
 		{
-			const te = terrain[t];
+			const u = terrain.length - t - 1;
+			cc.fillStyle = "red";
+			const te = terrain[u];
 			cc.fillRect( te.x - moveOffset.x,
 				te.y - moveOffset.y,
 				te.w,te.h );
 			
+			cc.fillStyle = "gray";
+			cc.fillRect( te.x - moveOffset.x + edge,
+				te.y - moveOffset.y + edge,
+				te.w - edge * 2,te.h - edge * 2 );
+			
 			if( te.w < 1 || te.h < 1 )
 			{
-				terrain.splice( t,1 );
+				terrain.splice( u,1 );
 				break;
 			}
 			

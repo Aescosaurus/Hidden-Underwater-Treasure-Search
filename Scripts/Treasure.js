@@ -4,8 +4,8 @@ function Treasure( gfx,x,y,price )
 	[
 		"Images/Treasure1.png"
 	];
-	const pos = Vec2( x,y );
 	const size = Vec2( 64,64 );
+	const pos = Vec2( x,y - size.y / 2 );
 	const val = price;
 	let willDelete = false;
 	// TODO: Determine image from price.
