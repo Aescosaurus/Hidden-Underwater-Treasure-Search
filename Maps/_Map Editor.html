@@ -404,7 +404,7 @@
 	function Export()
 	{
 		// let text = "function MainMap()\n{}\n\n";
-		let text = "function MainMap( gfx )\n{\n";
+		let text = "function MainMap( gfx,bulletVec )\n{\n";
 		function AddText( str,indt = 0 )
 		{
 			for( var i = 0; i < indt; ++i ) text += "\t";
@@ -442,7 +442,11 @@
 			{
 				enemyType = "Fish";
 			}
-			AddText( "new " + enemyType + "( " + en.x + "," + en.y + " ),",2 );
+			else if( en.lvl == 2 )
+			{
+				enemyType = "Squid";
+			}
+			AddText( "new " + enemyType + "( " + en.x + "," + en.y + ",bulletVec ),",2 );
 		}
 		AddText( "]",1 );
 		AddText( "};" );

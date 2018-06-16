@@ -4,9 +4,9 @@ function Map()
 	const treasures = [];
 	const enemies = [];
 	// 
-	this.InitWorld=( gfx )=>
+	this.InitWorld=( gfx,bullets )=>
 	{
-		const mm = new MainMap( gfx );
+		const mm = new MainMap( gfx,bullets );
 		const worldArr = mm.Terrain;
 		const treasArr = mm.Treasures;
 		const enemyArr = mm.Enemies;
@@ -27,32 +27,11 @@ function Map()
 		}
 	}
 	
-	this.Update=( moveAmount )=>
+	this.Update=( playerPos )=>
 	{
-		for( var ter in terrain )
-		{
-			terrain[ter].Update( moveAmount );
-		}
-		
-		for( var tr in treasures )
-		{
-			treasures[tr].Update( moveAmount );
-		}
-		
-		// TODO: Optimize this somehow.
-		for( var t in treasures )
-		{
-			if( treasures[t].WillRemove() )
-			{
-				treasures.splice( t,1 );
-			}
-		}
-		
 		for( var e in enemies )
 		{
-			enemies[e].Update();
-			
-			enemies[e].MoveBy( moveAmount );
+			enemies[e].Update( playerPos );
 		}
 	}
 	
@@ -71,6 +50,33 @@ function Map()
 		for( var e in enemies )
 		{
 			enemies[e].Draw( gfx );
+		}
+	}
+	
+	this.MoveAll=( amount )=>
+	{
+		for( var ter in terrain )
+		{
+			terrain[ter].Update( amount );
+		}
+		
+		for( var tr in treasures )
+		{
+			treasures[tr].Update( amount );
+		}
+		
+		// TODO: Optimize this somehow.
+		for( var t in treasures )
+		{
+			if( treasures[t].WillRemove() )
+			{
+				treasures.splice( t,1 );
+			}
+		}
+		
+		for( var e in enemies )
+		{
+			enemies[e].MoveBy( amount );
 		}
 	}
 	

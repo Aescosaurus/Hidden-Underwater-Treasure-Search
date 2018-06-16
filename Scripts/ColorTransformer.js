@@ -113,7 +113,7 @@ function ColorTransformer()
 		}
 		
 		const temp = Hex2RGB( realColor );
-		DarkenBy( temp,GetTimeOffset() * 10 );
+		DarkenBy( temp,GetTimeOffset() * 7 );
 		return( temp.GetColorCode() );
 	}
 }

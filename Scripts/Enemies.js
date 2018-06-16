@@ -6,9 +6,9 @@ function Enemy( x,y,ai )
 	const myAI = ai;
 	let moveAmount = Vec2( 0,0 );
 	// 
-	this.Update=()=>
+	this.Update=( playerPos )=>
 	{
-		ai.Go( pos,moveAmount );
+		ai.Go( pos,moveAmount,playerPos );
 	}
 	
 	this.Draw=( gfx )=>
@@ -22,14 +22,19 @@ function Enemy( x,y,ai )
 		pos.Add( amount );
 	}
 	
-	this.GetPos=()=>{ return( pos ); }
+	this.GetPos=()=>{ return( pos.Clone() ); }
 	this.GetRect=()=>
 	{
 		return( Rect( pos.x,pos.y,size.x,size.y ) );
 	}
 }
 
-function Fish( x,y )
+function Fish( x,y,bullets )
 {
 	Enemy.call( this,x,y,new FishAI.Patrol() );
+}
+
+function Squid( x,y,bullets )
+{
+	Enemy.call( this,x,y,new FishAI.Shoot( bullets ) );
 }

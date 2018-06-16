@@ -163,9 +163,19 @@ function Submarine( x,y,gfx )
 		}
 	}
 	
+	this.MoveAwayFrom=( thePos )=>
+	{
+		ReverseVel();
+	}
+	
 	this.GetDelta=()=>
 	{
 		return( moveAmount.GetMultiplied( -1 ) );
+	}
+	
+	this.GetPos=()=>
+	{
+		return( pos.Clone() );
 	}
 	
 	this.GetRect=()=>

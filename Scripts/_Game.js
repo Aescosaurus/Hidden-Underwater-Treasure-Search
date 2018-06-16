@@ -14,6 +14,8 @@ const ct = new ColorTransformer();
 let gold = 0;
 let moveAmount = Vec2( 0,0 );
 
+const enemyBullets = [];
+
 window.onload = function()
 {
 	Start();
@@ -31,7 +33,7 @@ function Start()
 	ms.Start( gfx.GetCanvas() );
 	gfx.Start();
 	// Initialize below!
-	world.InitWorld( gfx );
+	world.InitWorld( gfx,enemyBullets );
 }
 
 function Update()
@@ -41,25 +43,61 @@ function Update()
 	
 	moveAmount.Add( sub.GetDelta() );
 	
-	world.Update( sub.GetDelta() );
+	// if( moveAmount.y > 210 )
+	// {
+	// 	moveAmount.y -= sub.GetDelta().y;
+	// 	sub.MoveAwayFrom( sub.GetPos().GetAdded( Vec2( 0,-1 ) ) );
+	// }
+	
+	world.MoveAll( sub.GetDelta() );
 	
 	if( sub.CheckGroundHits( world.GetTerrainRects() ) )
 	{
-		world.Update( sub.GetDelta() );
+		world.MoveAll( sub.GetDelta() );
 	}
 	
 	if( sub.CheckEnemyHits( world.GetEnemies() ) )
 	{
-		world.Update( sub.GetDelta() );
+		world.MoveAll( sub.GetDelta() );
 	}
-	
-	sub.ResetDelta();
 	
 	gold += sub.CheckTreasureHits( world.GetTreasures() );
 	
 	if( kbd.KeyDown( ' ' ) )
 	{
 		sub.Hurt( 999 );
+	}
+	
+	world.Update( sub.GetPos() );
+	
+	const subRect = sub.GetRect();
+	for( var eb in enemyBullets )
+	{
+		const bull = enemyBullets[eb];
+		bull.Update( sub.GetDelta() );
+		
+		if( bull.GetRect().Overlaps( subRect ) )
+		{
+			bull.Kill();
+			
+			sub.Hurt( 1 );
+			sub.MoveAwayFrom( bull.GetPos() );
+		}
+	}
+	
+	for( var eb in enemyBullets )
+	{
+		if( enemyBullets[eb].WillKill() )
+		{
+			enemyBullets.splice( eb,1 );
+		}
+	}
+	
+	sub.ResetDelta();
+	
+	if( sub.GetPos().y < 0 )
+	{
+		// Return to menu.
 	}
 }
 
@@ -71,6 +109,12 @@ function Draw()
 		gfx.ScreenSize,ct.Transform( "#48A" ) );
 	// Draw below.
 	world.Draw( gfx );
+	
+	for( var eb in enemyBullets )
+	{
+		enemyBullets[eb].Draw( gfx );
+	}
+	
 	sub.Draw( gfx );
 	
 	gfx.DrawText( Vec2( 115,25 ),"25PX Lucida Console",
