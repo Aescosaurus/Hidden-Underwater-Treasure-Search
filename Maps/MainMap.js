@@ -15,7 +15,7 @@ function MainMap( gfx,bulletVec )
 	];
 	this.Enemies =
 	[
-		new Fish( 832,640,bulletVec ),
-		new Squid( 704,512,bulletVec ),
+		new Fish( 832,640,bulletVec,gfx ),
+		new Squid( 704,512,bulletVec,gfx ),
 	]
 };

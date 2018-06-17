@@ -1,6 +1,7 @@
 // Pls don't initialize this directly.
-function Enemy( x,y,ai )
+function Enemy( x,y,ai,imgNum )
 {
+	const myImg = imgNum;
 	const size = Vec2( 64,64 );
 	const pos = Vec2( x,y );
 	const myAI = ai;
@@ -13,7 +14,8 @@ function Enemy( x,y,ai )
 	
 	this.Draw=( gfx )=>
 	{
-		gfx.DrawRect( pos,size,"red" );
+		// gfx.DrawRect( pos,size,"red" );
+		gfx.DrawImage( myImg,pos,size );
 	}
 	
 	this.MoveBy=( amount )=>
@@ -29,12 +31,12 @@ function Enemy( x,y,ai )
 	}
 }
 
-function Fish( x,y,bullets )
+function Fish( x,y,bullets,gfx )
 {
-	Enemy.call( this,x,y,new FishAI.Patrol() );
+	Enemy.call( this,x,y,new FishAI.Patrol(),gfx.LoadImage( "Images/Enemy.png" ) );
 }
 
-function Squid( x,y,bullets )
+function Squid( x,y,bullets,gfx )
 {
-	Enemy.call( this,x,y,new FishAI.Shoot( bullets ) );
+	Enemy.call( this,x,y,new FishAI.Shoot( bullets ),gfx.LoadImage( "Images/Enemy.png" ) );
 }
