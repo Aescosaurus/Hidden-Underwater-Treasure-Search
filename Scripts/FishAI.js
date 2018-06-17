@@ -54,7 +54,8 @@ FishAI.Shoot = function( bulletVec )
 		{
 			refireTimer.Reset();
 			
-			bulletVec.push( new Bullet( pos.x + 32,pos.y + 32,playerPos ) );
+			bulletVec.push( new Bullet( pos.x,pos.y,
+				playerPos ) );
 		}
 	}
 }

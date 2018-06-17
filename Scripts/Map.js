@@ -101,4 +101,25 @@ function Map()
 	{
 		return( enemies );
 	}
+	
+	this.GetClosestEnemy=( target )=>
+	{
+		let shortest = 9999;
+		let toReturn = 0;
+		for( var en in enemies )
+		{
+			const e = enemies[en];
+			
+			const d = e.GetPos().GetSubtracted( target );
+			const dist = d.x * d.x + d.y * d.y;
+			
+			if( dist < shortest )
+			{
+				shortest = dist;
+				toReturn = en;
+			}
+		}
+		
+		return( enemies[toReturn] );
+	}
 }

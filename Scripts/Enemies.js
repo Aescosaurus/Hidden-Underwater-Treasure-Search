@@ -15,7 +15,9 @@ function Enemy( x,y,ai,imgNum )
 	this.Draw=( gfx )=>
 	{
 		// gfx.DrawRect( pos,size,"red" );
-		gfx.DrawImage( myImg,pos,size );
+		gfx.DrawImage( myImg,
+			pos.GetSubtracted( size.GetDivided( 2 ) ),
+			size );
 	}
 	
 	this.MoveBy=( amount )=>
@@ -27,7 +29,9 @@ function Enemy( x,y,ai,imgNum )
 	this.GetPos=()=>{ return( pos.Clone() ); }
 	this.GetRect=()=>
 	{
-		return( Rect( pos.x,pos.y,size.x,size.y ) );
+		return( Rect( pos.x - size.x / 2,
+			pos.y - size.y / 2,
+			size.x,size.y ) );
 	}
 }
 

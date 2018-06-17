@@ -15,6 +15,7 @@ let gold = 0;
 let moveAmount = Vec2( 0,0 );
 
 const enemyBullets = [];
+const torpedoes = [];
 
 window.onload = function()
 {
@@ -93,6 +94,18 @@ function Update()
 		}
 	}
 	
+	for( var tp in torpedoes )
+	{
+		const torp = torpedoes[tp];
+		
+		torp.Update();
+		
+		torp.Target( world
+			.GetClosestEnemy( torp.GetPos() ) );
+		
+		torp.MoveBy( sub.GetDelta() );
+	}
+	
 	sub.ResetDelta();
 	
 	if( sub.GetPos().y < 0 )
@@ -113,6 +126,11 @@ function Draw()
 	for( var eb in enemyBullets )
 	{
 		enemyBullets[eb].Draw( gfx );
+	}
+	
+	for( var tp in torpedoes )
+	{
+		torpedoes[tp].Draw( gfx );
 	}
 	
 	sub.Draw( gfx );

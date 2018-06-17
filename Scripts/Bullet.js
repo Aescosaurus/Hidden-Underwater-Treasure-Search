@@ -15,7 +15,9 @@ function Bullet( x,y,target )
 	
 	this.Draw=( gfx )=>
 	{
-		gfx.DrawRect( pos,size,"red" );
+		gfx.DrawRect( pos
+			.GetSubtracted( size.GetDivided( 2 ) ),
+			size,"red" );
 	}
 	
 	this.Kill=()=>
@@ -30,7 +32,9 @@ function Bullet( x,y,target )
 	
 	this.GetRect=()=>
 	{
-		return( Rect( pos.x,pos.y,size.x,size.y ) );
+		return( Rect( pos.x - size.x / 2,
+			pos.y - size.y / 2,
+			size.x,size.y ) );
 	}
 	
 	this.WillKill=()=>
