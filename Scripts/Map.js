@@ -27,11 +27,11 @@ function Map()
 		}
 	}
 	
-	this.Update=( playerPos )=>
+	this.Update=( playerPos,gfx )=>
 	{
 		for( var e in enemies )
 		{
-			enemies[e].Update( playerPos );
+			enemies[e].Update( playerPos,gfx );
 		}
 	}
 	

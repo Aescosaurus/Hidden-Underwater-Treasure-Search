@@ -68,7 +68,7 @@ function Update()
 		sub.Hurt( 999 );
 	}
 	
-	world.Update( sub.GetPos() );
+	world.Update( sub.GetPos(),gfx );
 	
 	const subRect = sub.GetRect();
 	for( var eb in enemyBullets )

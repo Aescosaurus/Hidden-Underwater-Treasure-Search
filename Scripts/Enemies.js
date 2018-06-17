@@ -6,9 +6,9 @@ function Enemy( x,y,ai )
 	const myAI = ai;
 	let moveAmount = Vec2( 0,0 );
 	// 
-	this.Update=( playerPos )=>
+	this.Update=( playerPos,gfx )=>
 	{
-		ai.Go( pos,moveAmount,playerPos );
+		ai.Go( pos,moveAmount,playerPos,gfx );
 	}
 	
 	this.Draw=( gfx )=>

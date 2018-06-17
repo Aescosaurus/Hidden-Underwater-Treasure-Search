@@ -4,7 +4,7 @@ function FishAI()
 FishAI.Stay = function()
 {
 	// Do nothing, you just stay XD.
-	this.Go=( pos,moveAmount,playerPos )=>
+	this.Go=( pos,moveAmount,playerPos,gfx )=>
 	{
 		
 	}
@@ -12,7 +12,7 @@ FishAI.Stay = function()
 
 FishAI.Float = function()
 {
-	this.Go=( pos,moveAmount,playerPos )=>
+	this.Go=( pos,moveAmount,playerPos,gfx )=>
 	{
 		const dist = 4;
 		const temp = Vec2( Random.Range( -dist,dist ),
@@ -27,7 +27,7 @@ FishAI.Patrol = function( speed = 2,dist = 70 )
 	const moveDist = dist;
 	let startPos = Vec2( -9999,-9999 );
 	let dir = -1;
-	this.Go=( pos,moveAmount,playerPos )=>
+	this.Go=( pos,moveAmount,playerPos,gfx )=>
 	{
 		startPos.Add( moveAmount );
 		if( startPos.Equals( Vec2( -9999,-9999 ) ) )
@@ -46,11 +46,11 @@ FishAI.Shoot = function( bulletVec )
 {
 	const refireTimer = new Timer( 72.4 );
 	// 
-	this.Go=( pos,moveAmount,playerPos )=>
+	this.Go=( pos,moveAmount,playerPos,gfx )=>
 	{
 		refireTimer.Update();
 		
-		if( refireTimer.IsDone() )
+		if( refireTimer.IsDone() && gfx.ScreenRect.Contains( pos ) )
 		{
 			refireTimer.Reset();
 			
