@@ -39,8 +39,10 @@ function Start()
 
 function Update()
 {
+	if( kbd.KeyDown( ' ' ) ) return;
 	// Update below.
 	sub.Update( kbd );
+	sub.DoTorpedoStuff( torpedoes,world.GetEnemies() );
 	
 	moveAmount.Add( sub.GetDelta() );
 	
@@ -69,7 +71,7 @@ function Update()
 		sub.Hurt( 999 );
 	}
 	
-	world.Update( sub.GetPos(),gfx );
+	world.Update( sub.GetPos(),gfx,torpedoes );
 	
 	const subRect = sub.GetRect();
 	for( var eb in enemyBullets )
@@ -84,26 +86,33 @@ function Update()
 			sub.Hurt( 1 );
 			sub.MoveAwayFrom( bull.GetPos() );
 		}
-	}
-	
-	for( var eb in enemyBullets )
-	{
+		
 		if( enemyBullets[eb].WillKill() )
 		{
 			enemyBullets.splice( eb,1 );
 		}
 	}
 	
+	// for( var eb in enemyBullets )
+	// {
+	// }
+	
 	for( var tp in torpedoes )
 	{
 		const torp = torpedoes[tp];
 		
+		torp.MoveBy( sub.GetDelta() );
+		
 		torp.Update();
 		
 		torp.Target( world
-			.GetClosestEnemy( torp.GetPos() ) );
+			.GetClosestEnemy( torp.GetPos() )
+			.GetPos() );
 		
-		torp.MoveBy( sub.GetDelta() );
+		if( torp.IsDead() )
+		{
+			torpedoes.splice( tp,1 );
+		}
 	}
 	
 	sub.ResetDelta();
@@ -116,6 +125,7 @@ function Update()
 
 function Draw()
 {
+	if( kbd.KeyDown( ' ' ) ) return;
 	gfx.DrawRect( Vec2( 0,0 ),gfx.ScreenSize,ct.Transform( "#269" ) );
 	gfx.DrawRect( Vec2( 0,moveAmount.y )
 		.GetSubtracted( Vec2( 0,gfx.ScreenHeight ) ),
@@ -131,6 +141,21 @@ function Draw()
 	for( var tp in torpedoes )
 	{
 		torpedoes[tp].Draw( gfx );
+		
+		const ens = world.GetEnemies();
+		for( var e in ens )
+		{
+			const cols = [ "red","orange","yellow","green","cyan","purple" ];
+			const randColor = cols[Random.Range( 0,cols.length - 1 )];
+			gfx.DrawLine( torpedoes[tp].GetPos(),ens[e].GetPos(),randColor,5 );
+			const p = ens[e].GetPos().GetSubtracted( torpedoes[tp].GetPos() );
+			gfx.DrawLine( sub.GetPos(),
+				sub.GetPos().GetAdded( p ),"red" );
+			// console.log( p );
+			// console.log( randColor );
+		}
+		// const p = torpedoes[tp].GetPos();
+		// gfx.DrawLine( p,world.GetClosestEnemy( p ).GetPos(),"orange",2 );
 	}
 	
 	sub.Draw( gfx );

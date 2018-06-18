@@ -25,6 +25,8 @@ function Submarine( x,y,gfx )
 	let isInvul = false;
 	const hpBar = new HealthBar( 5,Vec2( 5,5 ) );
 	const image = gfx.LoadImage( "Images/Sub.png" );
+	const torpedoTimer = new Timer( 52.4 );
+	const range = 525;
 	// 
 	this.Update=( kbd )=>
 	{
@@ -64,12 +66,17 @@ function Submarine( x,y,gfx )
 	
 	this.Draw=( gfx )=>
 	{
+		// gfx.DrawCircle( pos,range / 2,"orange" );
 		// gfx.DrawRect( pos,size,"red" );
 		if( isInvul )
 		{
-			gfx.DrawRect( pos,size,"blue" );
+			gfx.DrawRect( pos
+				.GetSubtracted( size.GetDivided( 2 ) ),
+				size,"blue" );
 		}
-		gfx.DrawImage( image,pos,size );
+		gfx.DrawImage( image,pos
+				.GetSubtracted( size.GetDivided( 2 ) ),
+				size );
 		
 		hpBar.Draw( 100,20,gfx );
 	}
@@ -148,6 +155,32 @@ function Submarine( x,y,gfx )
 		return( hasHit );
 	}
 	
+	this.DoTorpedoStuff=( torpedoVec,enemies )=>
+	{
+		torpedoTimer.Update();
+		
+		if( torpedoTimer.IsDone() )
+		{
+			// Reset makes it so you dont loop through
+			//  every enemy like 9999 times a sec.
+			torpedoTimer.Reset();
+			
+			for( var en in enemies )
+			{
+				const e = enemies[en];
+				// console.log( e.GetPos().GetSubtracted( pos ).GetLength() + "{|}" + range );
+				
+				if( e.GetPos().GetSubtracted( pos )
+					.GetLengthSq() < range * range )
+				{
+					torpedoVec.push( new Torpedo( pos.x,pos.y ) );
+					
+					break;
+				}
+			}
+		}
+	}
+	
 	this.ResetDelta=()=>
 	{
 		moveAmount.x = 0.0;
@@ -180,7 +213,9 @@ function Submarine( x,y,gfx )
 	
 	this.GetRect=()=>
 	{
-		return( Rect( pos.x,pos.y,size.x,size.y ) );
+		return( Rect( pos.x - size.x / 2,
+			pos.y - size.y / 2,
+			size.x,size.y ) );
 	}
 	
 	this.HasToSurface=()=>

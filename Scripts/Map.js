@@ -27,11 +27,21 @@ function Map()
 		}
 	}
 	
-	this.Update=( playerPos,gfx )=>
+	this.Update=( playerPos,gfx,torpedoes )=>
 	{
 		for( var e in enemies )
 		{
 			enemies[e].Update( playerPos,gfx );
+			
+			for( var tp in torpedoes )
+			{
+				if( torpedoes[tp].GetRect()
+					.Overlaps( enemies[e].GetRect() ) )
+				{
+					enemies[e].Hurt( 1 );
+					torpedoes[tp].Kill();
+				}
+			}
 		}
 	}
 	
@@ -104,17 +114,22 @@ function Map()
 	
 	this.GetClosestEnemy=( target )=>
 	{
-		let shortest = 9999;
+		// console.clear();
+		let shortest = 99999999;
 		let toReturn = 0;
 		for( var en in enemies )
 		{
 			const e = enemies[en];
 			
-			const d = e.GetPos().GetSubtracted( target );
-			const dist = d.x * d.x + d.y * d.y;
+			const dist = e.GetPos().GetSubtracted( target )
+				.GetLengthSq();
+			
+			// console.log( Math.sqrt( dist ) );
 			
 			if( dist < shortest )
 			{
+				console.log( Math.sqrt( dist ) );
+				console.log( e.GetPos().GetSubtracted( target ) );
 				shortest = dist;
 				toReturn = en;
 			}

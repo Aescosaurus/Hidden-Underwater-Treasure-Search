@@ -139,4 +139,19 @@ function Graphics()
 		ctx.font = font;
 		ctx.fillText( msg,pos.x,pos.y );
 	}
+	
+	this.DrawLine=( pos1,pos2,color,lw = 3 )=>
+	{
+		if( isNaN( pos1.x ) || isNaN( pos2.x ) ||
+			isNaN( pos1.y ) || isNaN( pos2.y ) )
+		{
+			console.log( "Drawing line to NaN failed!" );
+		}
+		ctx.strokeStyle = color;
+		ctx.lineWidth = lw;
+		ctx.beginPath(); // Erases previous line.
+		ctx.moveTo( pos1.x,pos1.y );
+		ctx.lineTo( pos2.x,pos2.y );
+		ctx.stroke();
+	}
 }

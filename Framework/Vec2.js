@@ -93,6 +93,16 @@ function Vec2_( x = 0,y = 0 )
 	{
 		return( new Vec2_( this.x,this.y ) );
 	}
+	
+	this.GetPerp=()=>
+	{
+		const temp = this.Clone();
+		const t = temp.x;
+		temp.x = temp.y;
+		temp.y = -t;
+		
+		return( temp );
+	}
 }
 
 function Vec2( x,y )

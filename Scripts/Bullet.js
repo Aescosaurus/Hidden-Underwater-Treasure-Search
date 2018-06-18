@@ -18,6 +18,12 @@ function Bullet( x,y,target )
 		gfx.DrawRect( pos
 			.GetSubtracted( size.GetDivided( 2 ) ),
 			size,"red" );
+		
+		if( !this.GetRect()
+			.Overlaps( gfx.ScreenRect ) )
+		{
+			dead = true;
+		}
 	}
 	
 	this.Kill=()=>
