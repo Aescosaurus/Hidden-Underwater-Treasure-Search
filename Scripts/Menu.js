@@ -4,22 +4,24 @@ function Button( x,y,w,h,text = "BOP" )
 	const size = Vec2( w,h );
 	let isDown = false;
 	let canPress = false;
+	let isHovering = false;
 	// 
 	this.Update=( ms )=>
 	{
 		isDown = ms.IsDown();
-		if( this.GetRect().Contains( ms.GetPos() ) )
-		{
-			if( !isDown ) canPress = true;
-		}
+		isHovering = this.GetRect().Contains( ms.GetPos() );
+		
+		if( isHovering && !isDown ) canPress = true;
 	}
 	
 	this.Draw=( gfx )=>
 	{
 		// TODO: Button image which stretches out.
-		gfx.DrawRect( pos,size,"blue" );
+		let col = "blue";
+		if( isHovering ) col = "lightblue";
+		gfx.DrawRect( pos,size,col );
 		
-		gfx.DrawText( pos.GetAdded( 20 ),
+		gfx.DrawText( pos.GetAdded( Vec2( 5,15 ) ),
 			"15PX Lucida Console","white",text );
 	}
 	
@@ -36,15 +38,20 @@ function Button( x,y,w,h,text = "BOP" )
 
 function Menu( gfx,sfx )
 {
-	const start = new Button( )
+	const start = new Button( 50,150,80,20,"Start" );
 	// 
 	this.Update=( ms )=>
 	{
-		
+		start.Update( ms );
 	}
 	
 	this.Draw=( gfx )=>
 	{
-		
+		start.Draw( gfx );
+	}
+	
+	this.WillStart=()=>
+	{
+		return( start.IsPressed() );
 	}
 }

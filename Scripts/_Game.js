@@ -7,6 +7,9 @@ const kbd = new Keyboard();
 const ms = new Mouse();
 const sfx = new Sound();
 
+const menu = new Menu( gfx,sfx );
+let menuActive = true;
+
 const sub = new Submarine( 60,60,gfx );
 const world = new Map();
 const ct = new ColorTransformer();
@@ -40,6 +43,16 @@ function Start()
 function Update()
 {
 	if( kbd.KeyDown( ' ' ) ) return;
+	
+	if( menuActive )
+	{
+		menu.Update( ms );
+		
+		if( menu.WillStart() ) menuActive = false;
+		
+		return;
+	}
+	
 	// Update below.
 	sub.Update( kbd );
 	sub.DoTorpedoStuff( torpedoes,world.GetEnemies() );
@@ -125,11 +138,19 @@ function Update()
 
 function Draw()
 {
-	if( kbd.KeyDown( ' ' ) ) return;
 	gfx.DrawRect( Vec2( 0,0 ),gfx.ScreenSize,ct.Transform( "#269" ) );
 	gfx.DrawRect( Vec2( 0,moveAmount.y )
 		.GetSubtracted( Vec2( 0,gfx.ScreenHeight ) ),
 		gfx.ScreenSize,ct.Transform( "#48A" ) );
+	
+	if( kbd.KeyDown( ' ' ) ) return;
+	
+	if( menuActive )
+	{
+		menu.Draw( gfx );
+		
+		return;
+	}
 	// Draw below.
 	world.Draw( gfx );
 	
@@ -142,18 +163,19 @@ function Draw()
 	{
 		torpedoes[tp].Draw( gfx );
 		
-		const ens = world.GetEnemies();
-		for( var e in ens )
-		{
-			const cols = [ "red","orange","yellow","green","cyan","purple" ];
-			const randColor = cols[Random.Range( 0,cols.length - 1 )];
-			gfx.DrawLine( torpedoes[tp].GetPos(),ens[e].GetPos(),randColor,5 );
-			const p = ens[e].GetPos().GetSubtracted( torpedoes[tp].GetPos() );
-			gfx.DrawLine( sub.GetPos(),
-				sub.GetPos().GetAdded( p ),"red" );
-			// console.log( p );
-			// console.log( randColor );
-		}
+		// const ens = world.GetEnemies();
+		// for( var e in ens )
+		// {
+		// 	const cols = [ "red","orange","yellow","green","cyan","purple" ];
+		// 	const randColor = cols[Random.Range( 0,cols.length - 1 )];
+		// 	gfx.DrawLine( torpedoes[tp].GetPos(),ens[e].GetPos(),randColor,5 );
+		// 	const p = ens[e].GetPos().GetSubtracted( torpedoes[tp].GetPos() );
+		// 	gfx.DrawLine( sub.GetPos(),
+		// 		sub.GetPos().GetAdded( p ),"red" );
+		// 	// console.log( p );
+		// 	// console.log( randColor );
+		// }
+		
 		// const p = torpedoes[tp].GetPos();
 		// gfx.DrawLine( p,world.GetClosestEnemy( p ).GetPos(),"orange",2 );
 	}

@@ -26,7 +26,7 @@ function Submarine( x,y,gfx )
 	const hpBar = new HealthBar( 5,Vec2( 5,5 ) );
 	const image = gfx.LoadImage( "Images/Sub.png" );
 	const torpedoTimer = new Timer( 52.4 );
-	const range = 525;
+	const range = 225;
 	// 
 	this.Update=( kbd )=>
 	{
