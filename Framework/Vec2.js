@@ -76,7 +76,7 @@ function Vec2_( x = 0,y = 0 )
 	
 	this.GetLengthSq=()=>
 	{
-		return( x * x + y * y );
+		return( this.x * this.x + this.y * this.y );
 	}
 	
 	this.GetLength=()=>
