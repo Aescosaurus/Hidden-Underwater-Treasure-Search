@@ -1,7 +1,7 @@
-function Button( x,y,w,h,text = "BOP" )
+function Button( x,y,text = "BOP",fontSize = 15 )
 {
 	const pos = Vec2( x,y );
-	const size = Vec2( w,h );
+	const size = Vec2( text.length * fontSize * ( 2 / 3 ),fontSize + 5 );
 	let isDown = false;
 	let canPress = false;
 	let isHovering = false;
@@ -21,8 +21,8 @@ function Button( x,y,w,h,text = "BOP" )
 		if( isHovering ) col = "lightblue";
 		gfx.DrawRect( pos,size,col );
 		
-		gfx.DrawText( pos.GetAdded( Vec2( 5,15 ) ),
-			"15PX Lucida Console","white",text );
+		gfx.DrawText( pos.GetAdded( Vec2( 5,fontSize - fontSize / 7 ) ),
+			fontSize + "PX Lucida Console","white",text );
 	}
 	
 	this.IsPressed=()=>
@@ -38,16 +38,19 @@ function Button( x,y,w,h,text = "BOP" )
 
 function Menu( gfx,sfx )
 {
-	const start = new Button( 50,150,80,20,"Start" );
+	const start = new Button( 50,150,"Start",55 );
+	const options = new Button( 50,240,"Options",35 );
 	// 
 	this.Update=( ms )=>
 	{
 		start.Update( ms );
+		options.Update( ms );
 	}
 	
 	this.Draw=( gfx )=>
 	{
 		start.Draw( gfx );
+		options.Draw( gfx );
 	}
 	
 	this.WillStart=()=>
