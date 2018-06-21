@@ -128,8 +128,8 @@ function Map()
 			
 			if( dist < shortest )
 			{
-				console.log( e.GetPos().GetSubtracted( target ) );
-				console.log( Math.sqrt( dist ) );
+				// console.log( e.GetPos().GetSubtracted( target ) );
+				// console.log( Math.sqrt( dist ) );
 				shortest = dist;
 				toReturn = en;
 			}

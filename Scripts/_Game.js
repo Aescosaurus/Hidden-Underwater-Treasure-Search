@@ -20,6 +20,11 @@ let moveAmount = Vec2( 0,0 );
 const enemyBullets = [];
 const torpedoes = [];
 
+let paused = false;
+const pauseButton = new ImageButton( gfx.ScreenWidth - 40,8,
+	32,32,gfx.LoadImage( "Images/PauseButton1.png" ),
+	gfx.LoadImage( "Images/PauseButton2.png" ) );
+
 window.onload = function()
 {
 	Start();
@@ -44,14 +49,22 @@ function Update()
 {
 	if( kbd.KeyDown( ' ' ) ) return;
 	
-	if( menuActive )
+	if( menuActive || paused )
 	{
 		menu.Update( ms );
 		
 		if( menu.WillStart() ) menuActive = false;
+		if( menu.WillResume() )
+		{
+			paused = false;
+			menu.Pause( false );
+		}
 		
 		return;
 	}
+	
+	pauseButton.Update( ms );
+	if( pauseButton.IsPressed() ) Pause();
 	
 	// Update below.
 	sub.Update( kbd );
@@ -79,10 +92,10 @@ function Update()
 	
 	gold += sub.CheckTreasureHits( world.GetTreasures() );
 	
-	if( kbd.KeyDown( ' ' ) )
-	{
-		sub.Hurt( 999 );
-	}
+	// if( kbd.KeyDown( ' ' ) )
+	// {
+	// 	sub.Hurt( 999 );
+	// }
 	
 	world.Update( sub.GetPos(),gfx,torpedoes );
 	
@@ -145,12 +158,15 @@ function Draw()
 	
 	if( kbd.KeyDown( ' ' ) ) return;
 	
-	if( menuActive )
+	if( menuActive || paused )
 	{
 		menu.Draw( gfx );
 		
 		return;
 	}
+	
+	pauseButton.Draw( gfx );
+	
 	// Draw below.
 	world.Draw( gfx );
 	
@@ -191,5 +207,11 @@ function Draw()
 	// 	gfx.DrawRect( Vec2( x.x,x.y ),
 	// 		Vec2( x.width,x.height ),"orange" );
 	// }
+}
+
+function Pause()
+{
+	paused = true;
+	menu.Pause( paused );
 }
 })();
