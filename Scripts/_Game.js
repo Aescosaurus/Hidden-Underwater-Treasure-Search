@@ -7,12 +7,13 @@ const kbd = new Keyboard();
 const ms = new Mouse();
 const sfx = new Sound();
 
-const menu = new Menu( gfx,sfx );
+const ct = new ColorTransformer();
+
+const menu = new Menu( gfx,sfx,ct );
 let menuActive = true;
 
 const sub = new Submarine( 60,60,gfx );
 const world = new Map();
-const ct = new ColorTransformer();
 
 let gold = 0;
 let moveAmount = Vec2( 0,0 );
@@ -151,10 +152,12 @@ function Update()
 
 function Draw()
 {
-	gfx.DrawRect( Vec2( 0,0 ),gfx.ScreenSize,ct.Transform( "#269" ) );
+	gfx.DrawRect( Vec2( 0,0 ),gfx.ScreenSize,
+		/*ct.Transform2( "#269" )*/ct.GetWaterColor() );
 	gfx.DrawRect( Vec2( 0,moveAmount.y )
 		.GetSubtracted( Vec2( 0,gfx.ScreenHeight ) ),
-		gfx.ScreenSize,ct.Transform( "#48A" ) );
+		gfx.ScreenSize,/*ct.Transform2( "#48A" )*/
+		ct.GetSkyColor() );
 	
 	if( kbd.KeyDown( ' ' ) ) return;
 	

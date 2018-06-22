@@ -72,9 +72,19 @@ function ColorTransformer()
 	}
 	const GetTimeOffset=()=>
 	{
-		const hrs = new Date().getHours();
+		// const hrs = new Date().getHours();
+		const hrs = 12;
 		const dist = Math.abs( 12 - hrs );
 		return( dist );
+	}
+	// Gets distance from 12 in 0-2 range.
+	const GetDistFrom12=()=>
+	{
+		// console.log( GetTimeOffset() );
+		const x = Math.round( GetTimeOffset() / 4 );
+		// console.log( x );
+		if( x < 0 ) return( 0 );
+		else return( x );
 	}
 	// 
 	const cache = [];
@@ -115,5 +125,36 @@ function ColorTransformer()
 		const temp = Hex2RGB( realColor );
 		DarkenBy( temp,GetTimeOffset() * 7 );
 		return( temp.GetColorCode() );
+	}
+	
+	this.Transform2=( color )=>
+	{
+		const skyColors = [ "#94FDFF","#0CF1FF" ];
+		const waterColors = [ "#00CDF9","#0098DC" ];
+		
+		const num = ( new Date().getHours() < 12 ? 0 : 1 );
+		
+		return( color );
+	}
+	
+	this.GetSkyColor=()=>
+	{
+		const skyColors = [ "#94FDFF","#0CF1FF","#0098DC" ];
+		return( skyColors[GetDistFrom12()] );
+	}
+	
+	this.GetWaterColor=()=>
+	{
+		const waterCols = [ "#0CF1FF","#00CDF9","#0069AA" ];
+		return( waterCols[GetDistFrom12()] );
+	}
+	
+	this.GetButtonColors=()=>
+	{
+		const baseCols = [ "#657392","#424C6E","#2A2F4E" ];
+		const litCols = [ "#92A1B9","#657392","#424C6E" ];
+		
+		return( [ baseCols[GetDistFrom12()],
+			litCols[GetDistFrom12()] ] );
 	}
 }

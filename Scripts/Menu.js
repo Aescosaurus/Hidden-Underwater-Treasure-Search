@@ -1,4 +1,4 @@
-function Button( x,y,text = "BOP",fontSize = 15 )
+function Button( x,y,colorTransformer,text = "BOP",fontSize = 15 )
 {
 	const pos = Vec2( x,y );
 	const size = Vec2( text.length * fontSize * ( 2 / 3 ),fontSize + 5 );
@@ -6,6 +6,7 @@ function Button( x,y,text = "BOP",fontSize = 15 )
 	let canPress = false;
 	let isHovering = false;
 	let pressed = false;
+	const colors = colorTransformer.GetButtonColors();
 	// 
 	this.Update=( ms )=>
 	{
@@ -32,8 +33,8 @@ function Button( x,y,text = "BOP",fontSize = 15 )
 	this.Draw=( gfx )=>
 	{
 		// TODO: Button image which stretches out.
-		let col = "#0069AA";
-		if( isHovering ) col = "#0098DC";
+		let col = colors[0];
+		if( isHovering ) col = colors[1];
 		gfx.DrawRect( pos,size,col );
 		
 		gfx.DrawText( pos.GetAdded( Vec2( 5,fontSize - fontSize / 7 ) ),
@@ -81,12 +82,12 @@ function ImageButton( x,y,w,h,image1,image2 )
 	}
 }
 
-function Menu( gfx,sfx )
+function Menu( gfx,sfx,ct )
 {
-	const start = new Button( 70,150,"Start",55 );
+	const start = new Button( 70,150,ct,"Start",55 );
 	// const options = new Button( 50,240,"Options",35 );
 	let pauseMenu = false;
-	const resume = new Button( 70,150,"Resume",45 );
+	const resume = new Button( 70,150,ct,"Resume",45 );
 	// 
 	this.Update=( ms )=>
 	{
