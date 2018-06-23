@@ -72,8 +72,8 @@ function ColorTransformer()
 	}
 	const GetTimeOffset=()=>
 	{
-		// const hrs = new Date().getHours();
-		const hrs = 12;
+		const hrs = new Date().getHours();
+		// const hrs = 12;
 		const dist = Math.abs( 12 - hrs );
 		return( dist );
 	}
@@ -81,7 +81,7 @@ function ColorTransformer()
 	const GetDistFrom12=()=>
 	{
 		// console.log( GetTimeOffset() );
-		const x = Math.round( GetTimeOffset() / 4 );
+		const x = Math.round( GetTimeOffset() / 4 ) - 1;
 		// console.log( x );
 		if( x < 0 ) return( 0 );
 		else return( x );

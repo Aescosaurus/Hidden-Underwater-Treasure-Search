@@ -3,6 +3,7 @@ function Map()
 	const terrain = [];
 	const treasures = [];
 	const enemies = [];
+	let subDmg = 1;
 	// 
 	this.InitWorld=( gfx,bullets )=>
 	{
@@ -38,7 +39,7 @@ function Map()
 				if( torpedoes[tp].GetRect()
 					.Overlaps( enemies[e].GetRect() ) )
 				{
-					enemies[e].Hurt( 1 );
+					enemies[e].Hurt( subDmg );
 					torpedoes[tp].Kill();
 				}
 			}
@@ -88,6 +89,18 @@ function Map()
 		{
 			enemies[e].MoveBy( amount );
 		}
+	}
+	
+	this.UpgradeSubDamage=()=>
+	{
+		subDmg += 0.6;
+	}
+	
+	this.Reset=()=>
+	{
+		terrain.splice( 0,terrain.length );
+		treasures.splice( 0,treasures.length );
+		enemies.splice( 0,enemies.length );
 	}
 	
 	this.GetTerrainRects=()=>

@@ -18,6 +18,11 @@ function HealthBar( maxHP,startPos )
 		curHP -= amount;
 	}
 	
+	this.Reset=()=>
+	{
+		curHP = max;
+	}
+	
 	this.GetHP=()=>
 	{
 		return( curHP );

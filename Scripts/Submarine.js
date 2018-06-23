@@ -19,14 +19,14 @@ function Submarine( x,y,gfx )
 		.GetDivided( 2 ).GetSubtracted( size );
 	const moveAmount = Vec2( 0,0 );
 	const vel = Vec2( 0,0 );
-	const slowdown = 0.95;
-	const maxSpeed = 5.1;
+	let slowdown = 0.95;
+	let maxSpeed = 5.1;
 	const invul = new Timer( 36 );
 	let isInvul = false;
 	const hpBar = new HealthBar( 5,Vec2( 5,5 ) );
 	const image = gfx.LoadImage( "Images/Sub.png" );
 	const torpedoTimer = new Timer( 52.4 );
-	const range = 225;
+	let range = 225;
 	// 
 	this.Update=( kbd )=>
 	{
@@ -199,6 +199,33 @@ function Submarine( x,y,gfx )
 	this.MoveAwayFrom=( thePos )=>
 	{
 		ReverseVel();
+	}
+	
+	this.Reset=()=>
+	{
+		// Need to reset pos bc pos is high after surfacing.
+		pos.x = gfx.ScreenWidth / 2 - size.x;
+		pos.y = gfx.ScreenHeight / 2 - size.y;
+		// moveAmount.x = 0;
+		// moveAmount.y = 0;
+		vel.x = 0;
+		vel.y = 0;
+		invul.Reset();
+		isInvul = false;
+		hpBar.Reset();
+		torpedoTimer.Reset();
+	}
+	
+	this.UpgradeSpeed=()=>
+	{
+		slowdown += 0.05;
+		maxSpeed += 0.4;
+	}
+	
+	this.UpgradeRange=()=>
+	{
+		const rangeAdd = 70;
+		range += rangeAdd;
 	}
 	
 	this.GetDelta=()=>

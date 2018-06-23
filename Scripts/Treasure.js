@@ -30,6 +30,13 @@ function Treasure( gfx,x,y,price )
 		return( val );
 	}
 	
+	this.Reset=()=>
+	{
+		pos.x = x;
+		pos.y = y;
+		willDelete = false;
+	}
+	
 	this.GetRect=()=>
 	{
 		return( Rect( pos.x,pos.y + size.y / 2,

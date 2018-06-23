@@ -11,11 +11,13 @@ const ct = new ColorTransformer();
 
 const menu = new Menu( gfx,sfx,ct );
 let menuActive = true;
+const shop = new UpgradeShop( ct,gfx );
+let shopActive = false;
 
 const sub = new Submarine( 60,60,gfx );
 const world = new Map();
 
-let gold = 0;
+let gold = 60;
 let moveAmount = Vec2( 0,0 );
 
 const enemyBullets = [];
@@ -48,14 +50,48 @@ function Start()
 
 function Update()
 {
-	if( kbd.KeyDown( ' ' ) ) return;
+	// if( kbd.KeyDown( ' ' ) ) return;
+	
+	if( shopActive )
+	{
+		const payAmount = shop.Update( gold,ms );
+		if( payAmount > 0 )
+		{
+			gold -= payAmount;
+			shop.CoolItForASec();
+		}
+		
+		if( shop.Done() || kbd.KeyDown( 13 ) )
+		{
+			shopActive = false;
+			PartialReset();
+		}
+		else if( shop.USpeed() )
+		{
+			sub.UpgradeSpeed();
+		}
+		else if( shop.UDamage() )
+		{
+			world.UpgradeSubDamage();
+		}
+		else if( shop.URange() )
+		{
+			sub.UpgradeRange();
+		}
+		
+		return;
+	}
 	
 	if( menuActive || paused )
 	{
 		menu.Update( ms );
 		
-		if( menu.WillStart() ) menuActive = false;
-		if( menu.WillResume() )
+		if( menu.WillStart() || kbd.KeyDown( 13 ) )
+		{
+			menuActive = false;
+		}
+		
+		if( menu.WillResume() || kbd.KeyDown( 13 ) )
 		{
 			paused = false;
 			menu.Pause( false );
@@ -93,10 +129,10 @@ function Update()
 	
 	gold += sub.CheckTreasureHits( world.GetTreasures() );
 	
-	// if( kbd.KeyDown( ' ' ) )
-	// {
-	// 	sub.Hurt( 999 );
-	// }
+	if( kbd.KeyDown( ' ' ) )
+	{
+		sub.Hurt( 999 );
+	}
 	
 	world.Update( sub.GetPos(),gfx,torpedoes );
 	
@@ -146,7 +182,9 @@ function Update()
 	
 	if( sub.GetPos().y < 0 )
 	{
-		// Return to menu.
+		// Return to shop.
+		menuActive = false;
+		shopActive = true;
 	}
 }
 
@@ -159,7 +197,17 @@ function Draw()
 		gfx.ScreenSize,/*ct.Transform2( "#48A" )*/
 		ct.GetSkyColor() );
 	
-	if( kbd.KeyDown( ' ' ) ) return;
+	// if( kbd.KeyDown( ' ' ) ) return;
+	
+	if( shopActive )
+	{
+		shop.Draw( gfx,ms );
+	
+		gfx.DrawText( Vec2( 115,25 ),"25PX Lucida Console",
+			"gold",gold );
+		
+		return;
+	}
 	
 	if( menuActive || paused )
 	{
@@ -216,5 +264,16 @@ function Pause()
 {
 	paused = true;
 	menu.Pause( paused );
+}
+
+function PartialReset()
+{
+	enemyBullets.splice( 0,enemyBullets.length );
+	torpedoes.splice( 0,torpedoes.length );
+	moveAmount = Vec2( 0,0 );
+	sub.Reset();
+	
+	world.Reset();
+	world.InitWorld( gfx,enemyBullets );
 }
 })();

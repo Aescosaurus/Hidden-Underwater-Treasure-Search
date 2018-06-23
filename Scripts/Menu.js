@@ -1,7 +1,8 @@
 function Button( x,y,colorTransformer,text = "BOP",fontSize = 15 )
 {
 	const pos = Vec2( x,y );
-	const size = Vec2( text.length * fontSize * ( 2 / 3 ),fontSize + 5 );
+	const size = Vec2( text.length * fontSize * ( 2 / 3 ),
+		parseInt( fontSize ) + 5 );
 	let isDown = false;
 	let canPress = false;
 	let isHovering = false;
@@ -41,14 +42,47 @@ function Button( x,y,colorTransformer,text = "BOP",fontSize = 15 )
 			fontSize + "PX Lucida Console","white",text );
 	}
 	
+	this.Reset=()=>
+	{
+		isDown = false;
+		canPress = false;
+		isHovering = false;
+		pressed = false;
+	}
+	
+	this.SoftReset=()=>
+	{
+		isDown = false;
+	}
+	
 	this.IsPressed=()=>
 	{
 		return( isHovering && isDown && canPress )
 	}
 	
+	this.IsHovering=()=>
+	{
+		return( isHovering );
+	}
+	
+	this.GetPos=()=>
+	{
+		return( pos.Clone() );
+	}
+	
 	this.GetRect=()=>
 	{
 		return( Rect( pos.x,pos.y,size.x,size.y ) );
+	}
+	
+	this.GetWidth=()=>
+	{
+		return( size.x );
+	}
+	
+	this.GetHeight=()=>
+	{
+		return( size.y );
 	}
 }
 

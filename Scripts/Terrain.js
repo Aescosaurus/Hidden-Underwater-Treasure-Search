@@ -44,6 +44,12 @@ function Terrain( gfx,area,level = 1 )
 		// }
 	}
 	
+	this.Reset=()=>
+	{
+		pos.x = area.x;
+		pos.y = area.y;
+	}
+	
 	this.GetRect=()=>
 	{
 		return( Rect( pos.x,pos.y,size.x,size.y ) );
