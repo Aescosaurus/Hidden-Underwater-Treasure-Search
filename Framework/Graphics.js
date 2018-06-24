@@ -107,6 +107,23 @@ function Graphics()
 		ctx.fill();
 	}
 	
+	this.DrawHollowCircle=( pos,radius,c )=>
+	{
+		if( isNaN( pos.x ) || isNaN( pos.y ) || isNaN( radius ) )
+		{
+			console.log( "Drawing circle to NaN cancelled!" );
+			return false;
+		}
+		
+		ctx.strokeStyle = c;
+		ctx.lineWidth = 2;
+		
+		ctx.beginPath();
+		ctx.arc( pos.x,pos.y,radius,0,2 * Math.PI );
+		ctx.stroke();
+		// ctx.fill();
+	}
+	
 	this.DrawGrad=( pos,size,colors )=>
 	{
 		if( isNaN( pos.x ) || isNaN( pos.y ) || isNaN( size.x ) || isNaN( size.y ) )

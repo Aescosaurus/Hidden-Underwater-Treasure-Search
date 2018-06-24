@@ -19,6 +19,9 @@ function Enemy( x,y,ai,imgNum,health )
 		gfx.DrawImage( myImg,
 			pos.GetSubtracted( size.GetDivided( 2 ) ),
 			size );
+		// const r = this.GetRect();
+		// gfx.DrawRect( Vec2( r.x,r.y ),
+		// 	Vec2( r.width,r.height ),"#0F0" );
 	}
 	
 	this.MoveBy=( amount )=>
@@ -41,7 +44,12 @@ function Enemy( x,y,ai,imgNum,health )
 	{
 		return( Rect( pos.x - size.x / 2,
 			pos.y - size.y / 2,
-			size.x,size.y ) );
+			size.x,size.y ).GetExpanded( -size.x / 4 ) );
+	}
+	
+	this.IsOnScreen=( gfx )=>
+	{
+		return( this.GetRect().Overlaps( gfx.ScreenRect ) );
 	}
 }
 

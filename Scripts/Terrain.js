@@ -17,7 +17,10 @@ function Terrain( gfx,area,level = 1 )
 	
 	this.Draw=( gfx )=>
 	{
-		gfx.DrawRect( pos,size,"gray" );
+		// gfx.DrawRect( pos,size,"gray" );
+		// TODO: Draw white outline around terrain.
+		// gfx.DrawRect( pos.GetSubtracted( Vec2( 2,2 ) ),
+		// 	size.GetAdded( Vec2( 4,4 ) ),"#FFFFFF" );
 		
 		const tS = Terrain.prototype.tileSize;
 		for( let y = pos.y; y < pos.y + size.y - tS; y += tS * 2 )

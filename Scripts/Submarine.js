@@ -1,4 +1,4 @@
-function Submarine( x,y,gfx )
+function Submarine( x,y,shop,gfx )
 {
 	const ReverseVel=()=>
 	{
@@ -6,6 +6,23 @@ function Submarine( x,y,gfx )
 			.GetMultiplied( 3 ) );
 		
 		vel.Multiply( -1 );
+	}
+	const GetRange=()=>
+	{
+		return( maxRange * shop.RangeAdd() + 60 );
+	}
+	const GetMaxSpeed=()=>
+	{
+		return( maxMaxSpeed * shop.SpeedAdd() + 4 );
+	}
+	const GetVel=()=>
+	{
+		return( 0.7 + maxVel * shop.SpeedAdd() );
+	}
+	const GetMaxFuel=()=>
+	{
+		return( maxMaxFuel * ( shop.FuelAdd() * 1 ) +
+			500 * shop.SpeedAdd() );
 	}
 	// 
 	const ctrls = {
@@ -19,14 +36,20 @@ function Submarine( x,y,gfx )
 		.GetDivided( 2 ).GetSubtracted( size );
 	const moveAmount = Vec2( 0,0 );
 	const vel = Vec2( 0,0 );
-	let slowdown = 0.95;
-	let maxSpeed = 5.1;
+	const slowdown = 0.95;
+	const maxMaxSpeed = 6.5;
+	const maxVel = 0.7;
 	const invul = new Timer( 36 );
 	let isInvul = false;
 	const hpBar = new HealthBar( 5,Vec2( 5,5 ) );
-	const image = gfx.LoadImage( "Images/Sub.png" );
+	// const image = gfx.LoadImage( "Images/Sub1.png" );
+	const anim = new Anim( "Images/Sub",1,4,12,gfx );
 	const torpedoTimer = new Timer( 52.4 );
-	let range = 225;
+	const range = 100;
+	const maxRange = 350;
+	let maxFuel = 150;
+	const maxMaxFuel = 1500;
+	const fuelBar = new HealthBar( maxFuel,Vec2( 5,30 ) );
 	// 
 	this.Update=( kbd )=>
 	{
@@ -34,14 +57,17 @@ function Submarine( x,y,gfx )
 		{
 			const surfaceSpeed = 8;
 			pos.y -= surfaceSpeed;
+			vel.Set( 0,0 );
 			moveAmount.Add( Vec2( 0,-surfaceSpeed ) );
 		}
 		
-		if( kbd.KeyDown( ctrls.Up ) ) --vel.y;
-		if( kbd.KeyDown( ctrls.Down ) ) ++vel.y;
-		if( kbd.KeyDown( ctrls.Left ) ) --vel.x;
-		if( kbd.KeyDown( ctrls.Right ) ) ++vel.x;
+		const vv = GetVel();
+		if( kbd.KeyDown( ctrls.Up ) ) vel.y -= vv;
+		if( kbd.KeyDown( ctrls.Down ) ) vel.y += vv;
+		if( kbd.KeyDown( ctrls.Left ) ) vel.x -= vv;
+		if( kbd.KeyDown( ctrls.Right ) ) vel.x += vv;
 		
+		const maxSpeed = GetMaxSpeed();
 		if( vel.x > maxSpeed ) vel.x = maxSpeed;
 		if( vel.y > maxSpeed ) vel.y = maxSpeed;
 		if( vel.x < -maxSpeed ) vel.x = -maxSpeed;
@@ -62,23 +88,36 @@ function Submarine( x,y,gfx )
 				isInvul = false;
 			}
 		}
+		
+		const curSpd = vel.GetLengthSq() / 50.0;
+		if( curSpd != 0 )
+		{
+			anim.Update( curSpd );
+			
+			fuelBar.LoseHP( curSpd );
+		}
 	}
 	
 	this.Draw=( gfx )=>
 	{
 		// gfx.DrawCircle( pos,range / 2,"orange" );
 		// gfx.DrawRect( pos,size,"red" );
+		gfx.DrawHollowCircle( pos,GetRange(),"white" );
 		if( isInvul )
 		{
 			gfx.DrawRect( pos
 				.GetSubtracted( size.GetDivided( 2 ) ),
 				size,"blue" );
 		}
-		gfx.DrawImage( image,pos
-				.GetSubtracted( size.GetDivided( 2 ) ),
-				size );
+		// gfx.DrawImage( image,pos
+		// 		.GetSubtracted( size.GetDivided( 2 ) ),
+		// 		size );
+		anim.Draw( pos
+			.GetSubtracted( size.GetDivided( 2 ) ),
+			size,gfx );
 		
 		hpBar.Draw( 100,20,gfx );
+		fuelBar.Draw( 100,20,gfx,"orange" );
 	}
 	
 	this.CheckGroundHits=( groundArr )=>
@@ -171,7 +210,9 @@ function Submarine( x,y,gfx )
 				// console.log( e.GetPos().GetSubtracted( pos ).GetLength() + "{|}" + range );
 				
 				if( e.GetPos().GetSubtracted( pos )
-					.GetLengthSq() < range * range )
+					.GetLengthSq() <
+					GetRange() * GetRange() + 64 * 64 &&
+					e.IsOnScreen( gfx ) )
 				{
 					torpedoVec.push( new Torpedo( pos.x,pos.y ) );
 					
@@ -206,14 +247,13 @@ function Submarine( x,y,gfx )
 		// Need to reset pos bc pos is high after surfacing.
 		pos.x = gfx.ScreenWidth / 2 - size.x;
 		pos.y = gfx.ScreenHeight / 2 - size.y;
-		// moveAmount.x = 0;
-		// moveAmount.y = 0;
-		vel.x = 0;
-		vel.y = 0;
+		vel.Set( 0,0 );
 		invul.Reset();
 		isInvul = false;
 		hpBar.Reset();
+		fuelBar.Reset();
 		torpedoTimer.Reset();
+		fuelBar.SetMax( GetMaxFuel() );
 	}
 	
 	this.UpgradeSpeed=()=>
@@ -224,7 +264,7 @@ function Submarine( x,y,gfx )
 	
 	this.UpgradeRange=()=>
 	{
-		const rangeAdd = 70;
+		const rangeAdd = 40;
 		range += rangeAdd;
 	}
 	
@@ -247,6 +287,6 @@ function Submarine( x,y,gfx )
 	
 	this.HasToSurface=()=>
 	{
-		return( hpBar.GetHP() < 1 );
+		return( hpBar.GetHP() < 1 || fuelBar.GetHP() < 1 );
 	}
 }

@@ -9,9 +9,22 @@ function UpgradeShop( ct,gfx )
 		{
 			return( this.cur / this.max );
 		}
+		this.GetTotal=()=>
+		{
+			let total = 0;
+			for( let i = cur; i > 0; --i )
+			{
+				total += i / this.max;
+			}
+			return( total );
+		}
 		this.GetPrice=( maxPrice )=>
 		{
 			return( Math.ceil( this.GetAmount() * maxPrice ) );
+		}
+		this.IsAtMax=()=>
+		{
+			return( this.cur == this.max );
 		}
 	}
 	// 
@@ -39,7 +52,8 @@ function UpgradeShop( ct,gfx )
 		
 		drawPrice = 0;
 		
-		if( money > engRange.GetPrice( maxPrice ) )
+		if( money > engRange.GetPrice( maxPrice ) &&
+			!engRange.IsAtMax() )
 		{
 			if( uEngine.IsHovering() )
 			{
@@ -55,7 +69,8 @@ function UpgradeShop( ct,gfx )
 		}
 		else uEngine.Reset();
 		
-		if( money > dmgRange.GetPrice( maxPrice ) )
+		if( money > dmgRange.GetPrice( maxPrice ) &&
+			!dmgRange.IsAtMax() )
 		{
 			if( uDamage.IsHovering() )
 			{
@@ -71,7 +86,8 @@ function UpgradeShop( ct,gfx )
 		}
 		else uDamage.Reset();
 		
-		if( money > rngRange.GetPrice( maxPrice ) )
+		if( money > rngRange.GetPrice( maxPrice ) &&
+			!rngRange.IsAtMax() )
 		{
 			if( uRange.IsHovering() )
 			{
@@ -128,9 +144,11 @@ function UpgradeShop( ct,gfx )
 	
 	this.Done=()=> { return( cont.IsPressed() ); }
 	
-	this.USpeed=()=> { return( uEngine.IsPressed() ); }
+	this.SpeedAdd=()=> { return( engRange.GetAmount() ); }
 	
-	this.UDamage=()=> { return( uDamage.IsPressed() ); }
+	this.DamageAdd=()=> { return( dmgRange.GetAmount() ); }
 	
-	this.URange=()=> { return( uRange.IsPressed() ); }
+	this.RangeAdd=()=> { return( rngRange.GetAmount() ); }
+	
+	this.FuelAdd=()=> { return( 1 / 6 );/*return( fUlRange.GetTotal() );*/ }
 }

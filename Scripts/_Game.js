@@ -14,10 +14,10 @@ let menuActive = true;
 const shop = new UpgradeShop( ct,gfx );
 let shopActive = false;
 
-const sub = new Submarine( 60,60,gfx );
-const world = new Map();
+const sub = new Submarine( 60,60,shop,gfx );
+const world = new Map( shop );
 
-let gold = 60;
+let gold = 1560;
 let moveAmount = Vec2( 0,0 );
 
 const enemyBullets = [];
@@ -66,18 +66,18 @@ function Update()
 			shopActive = false;
 			PartialReset();
 		}
-		else if( shop.USpeed() )
-		{
-			sub.UpgradeSpeed();
-		}
-		else if( shop.UDamage() )
-		{
-			world.UpgradeSubDamage();
-		}
-		else if( shop.URange() )
-		{
-			sub.UpgradeRange();
-		}
+		// else if( shop.USpeed() )
+		// {
+		// 	sub.UpgradeSpeed();
+		// }
+		// else if( shop.UDamage() )
+		// {
+		// 	world.UpgradeSubDamage();
+		// }
+		// else if( shop.URange() )
+		// {
+		// 	sub.UpgradeRange();
+		// }
 		
 		return;
 	}

@@ -103,6 +103,12 @@ function Vec2_( x = 0,y = 0 )
 		
 		return( temp );
 	}
+	
+	this.Set=( x_in,y_in )=>
+	{
+		this.x = x_in;
+		this.y = y_in;
+	}
 }
 
 function Vec2( x,y )

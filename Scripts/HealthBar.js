@@ -1,6 +1,6 @@
 function HealthBar( maxHP,startPos )
 {
-	const max = maxHP;
+	let max = maxHP;
 	let curHP = maxHP;
 	// 
 	this.Draw=( width,height,gfx,color = "red" )=>
@@ -21,6 +21,11 @@ function HealthBar( maxHP,startPos )
 	this.Reset=()=>
 	{
 		curHP = max;
+	}
+	
+	this.SetMax=( amount )=>
+	{
+		max = amount;
 	}
 	
 	this.GetHP=()=>

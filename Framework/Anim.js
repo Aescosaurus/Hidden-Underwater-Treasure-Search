@@ -1,50 +1,28 @@
-// Call with sprite sheet being gfx.LoadImage( "spriteSheetURL.png" );
-function Anim( x,y,width,height,count,spriteSheet,fps )
+function Anim( name,first,last,fps,gfx )
 {
-	const Init=()=>
+	const Start=()=>
 	{
-		for( let i = 0; i < count; ++i )
+		for( var i = first; i <= last; ++i )
 		{
-			const left = x + i * width;
-			const right = x + ( i + 1 ) * width;
-			const top = y;
-			const bot = y + height;
-			frames.push( Rect( left,top,
-				( right - left ),( bot - top ) ) );
-		}
-	}
-	
-	const Advance=()=>
-	{
-		if( ++iCurFrame >= Math.floor( frames.length ) )
-		{
-			iCurFrame = 0;
+			images.push( gfx.LoadImage( name + i + ".png" ) );
 		}
 	}
 	// 
-	const sheet = spriteSheet;
-	const holdTime = 1.0 / fps;
-	let frames = [];
-	let iCurFrame = 0;
-	let curFrameTime = 0.0;
-	Init();
+	const images = [];
+	Start();
+	let spot = 0;
+	const updateAmount = fps / 30.0;
+	// const max = loopSecs * 30;
 	// 
-	this.Update=( dt )=>
+	this.Update=( amount = updateAmount )=>
 	{
-		curFrameTime += dt;
-		while( curFrameTime >= holdTime )
-		{
-			Advance();
-			curFrameTime -= holdTime;
-		}
+		spot += amount;
+		
+		if( spot >= images.length ) spot = 0.0;
 	}
 	
-	this.Draw=( pos,gfx )=>
+	this.Draw=( pos,size,gfx )=>
 	{
-		gfx.DrawImageClip( spriteSheet,pos,
-			frames[iCurFrame],
-			Vec2( width,height ) );
+		gfx.DrawImage( images[Math.floor( spot )],pos,size );
 	}
-	
-	return( this );
 }

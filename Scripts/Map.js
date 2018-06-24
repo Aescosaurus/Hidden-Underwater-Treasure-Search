@@ -1,9 +1,9 @@
-function Map()
+function Map( shop )
 {
 	const terrain = [];
 	const treasures = [];
 	const enemies = [];
-	let subDmg = 1;
+	const maxSubDmg = 14;
 	// 
 	this.InitWorld=( gfx,bullets )=>
 	{
@@ -39,7 +39,7 @@ function Map()
 				if( torpedoes[tp].GetRect()
 					.Overlaps( enemies[e].GetRect() ) )
 				{
-					enemies[e].Hurt( subDmg );
+					enemies[e].Hurt( shop.DamageAdd() * maxSubDmg );
 					torpedoes[tp].Kill();
 				}
 			}
@@ -89,11 +89,6 @@ function Map()
 		{
 			enemies[e].MoveBy( amount );
 		}
-	}
-	
-	this.UpgradeSubDamage=()=>
-	{
-		subDmg += 0.6;
 	}
 	
 	this.Reset=()=>

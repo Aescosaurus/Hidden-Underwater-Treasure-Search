@@ -41,6 +41,13 @@ function Rect_( x,y,w,h )
 			this.width,this.height ) );
 	}
 	
+	this.GetExpanded=( amount )=>
+	{
+		return( Rect( this.x - amount,this.y - amount,
+			this.width + amount * 2,
+			this.height + amount * 2 ) );
+	}
+	
 	this.Clone=()=>
 	{
 		return( new Rect_( this.x,this.y,this.width,this.height ) );
