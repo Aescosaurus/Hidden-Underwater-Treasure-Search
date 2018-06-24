@@ -18,6 +18,12 @@ function UpgradeShop( ct,gfx )
 			}
 			return( total );
 		}
+		this.GetTotal2=()=>
+		{
+			let total = 0;
+			total += this.cur / this.max;
+			total += ( this.cur - 1 ) / this.max;
+		}
 		this.GetPrice=( maxPrice )=>
 		{
 			return( Math.ceil( this.GetAmount() * maxPrice ) );
@@ -30,13 +36,15 @@ function UpgradeShop( ct,gfx )
 	// 
 	const cont = new Button( gfx.ScreenWidth - 210,
 		gfx.ScreenHeight - 60,ct,"Continue",35 );
-	const uEngine = new Button( 70,120,ct,"Speed",45 );
-	const uDamage = new Button( 70,220,ct,"Damage",45 );
-	const uRange = new Button( 70,320,ct,"Range",45 );
+	const uEngine = new Button( 70,170,ct,"Speed",45 );
+	const uDamage = new Button( 70,310,ct,"Damage",45 );
+	const uRange = new Button( 410,170,ct,"Range",45 );
+	const uFuel = new Button( 410,310,ct,"Fuel",45 );
 	
 	const engRange = new Range( 1,6 );
 	const dmgRange = new Range( 1,6 );
 	const rngRange = new Range( 1,6 );
+	const fUlRange = new Range( 1,6 );
 	
 	let drawPrice = 0;
 	
@@ -49,6 +57,7 @@ function UpgradeShop( ct,gfx )
 		uEngine.Update( ms );
 		uDamage.Update( ms );
 		uRange.Update( ms );
+		uFuel.Update( ms );
 		
 		drawPrice = 0;
 		
@@ -103,6 +112,23 @@ function UpgradeShop( ct,gfx )
 		}
 		else uRange.Reset();
 		
+		if( money > fUlRange.GetPrice( maxPrice ) &&
+			!fUlRange.IsAtMax() )
+		{
+			if( uFuel.IsHovering() )
+			{
+				drawPrice = fUlRange.GetPrice( maxPrice );
+			}
+			
+			if( uFuel.IsPressed() )
+			{
+				const price = fUlRange.GetPrice( maxPrice );
+				++fUlRange.cur;
+				return( price );
+			}
+		}
+		else uFuel.Reset();
+		
 		return( 0 );
 	}
 	
@@ -123,10 +149,15 @@ function UpgradeShop( ct,gfx )
 		
 		uEngine.Draw( gfx );
 		DrawBar( uEngine,engRange );
+		
 		uDamage.Draw( gfx );
 		DrawBar( uDamage,dmgRange );
+		
 		uRange.Draw( gfx );
 		DrawBar( uRange,rngRange );
+		
+		uFuel.Draw( gfx );
+		DrawBar( uFuel,fUlRange );
 		
 		if( drawPrice != 0 )
 		{
@@ -140,6 +171,7 @@ function UpgradeShop( ct,gfx )
 		uEngine.Reset();
 		uDamage.Reset();
 		uRange.Reset();
+		uFuel.Reset();
 	}
 	
 	this.Done=()=> { return( cont.IsPressed() ); }
@@ -150,5 +182,5 @@ function UpgradeShop( ct,gfx )
 	
 	this.RangeAdd=()=> { return( rngRange.GetAmount() ); }
 	
-	this.FuelAdd=()=> { return( 1 / 6 );/*return( fUlRange.GetTotal() );*/ }
+	this.FuelAdd=()=> { return( fUlRange.GetAmount() ); }
 }

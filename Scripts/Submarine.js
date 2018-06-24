@@ -21,8 +21,8 @@ function Submarine( x,y,shop,gfx )
 	}
 	const GetMaxFuel=()=>
 	{
-		return( maxMaxFuel * ( shop.FuelAdd() * 1 ) +
-			500 * shop.SpeedAdd() );
+		return( maxMaxFuel * shop.FuelAdd()
+			/*500 * shop.SpeedAdd()*/ );
 	}
 	// 
 	const ctrls = {
@@ -48,8 +48,8 @@ function Submarine( x,y,shop,gfx )
 	const range = 100;
 	const maxRange = 350;
 	let maxFuel = 150;
-	const maxMaxFuel = 1500;
-	const fuelBar = new HealthBar( maxFuel,Vec2( 5,30 ) );
+	const maxMaxFuel = 1350;
+	const fuelBar = new HealthBar( GetMaxFuel(),Vec2( 5,30 ) );
 	// 
 	this.Update=( kbd )=>
 	{
@@ -251,9 +251,9 @@ function Submarine( x,y,shop,gfx )
 		invul.Reset();
 		isInvul = false;
 		hpBar.Reset();
+		fuelBar.SetMax( GetMaxFuel() );
 		fuelBar.Reset();
 		torpedoTimer.Reset();
-		fuelBar.SetMax( GetMaxFuel() );
 	}
 	
 	this.UpgradeSpeed=()=>
