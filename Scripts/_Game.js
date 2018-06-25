@@ -223,8 +223,6 @@ function Draw()
 		return;
 	}
 	
-	pauseButton.Draw( gfx );
-	
 	// Draw below.
 	world.Draw( gfx );
 	
@@ -236,22 +234,6 @@ function Draw()
 	for( var tp in torpedoes )
 	{
 		torpedoes[tp].Draw( gfx );
-		
-		// const ens = world.GetEnemies();
-		// for( var e in ens )
-		// {
-		// 	const cols = [ "red","orange","yellow","green","cyan","purple" ];
-		// 	const randColor = cols[Random.Range( 0,cols.length - 1 )];
-		// 	gfx.DrawLine( torpedoes[tp].GetPos(),ens[e].GetPos(),randColor,5 );
-		// 	const p = ens[e].GetPos().GetSubtracted( torpedoes[tp].GetPos() );
-		// 	gfx.DrawLine( sub.GetPos(),
-		// 		sub.GetPos().GetAdded( p ),"red" );
-		// 	// console.log( p );
-		// 	// console.log( randColor );
-		// }
-		
-		// const p = torpedoes[tp].GetPos();
-		// gfx.DrawLine( p,world.GetClosestEnemy( p ).GetPos(),"orange",2 );
 	}
 	
 	sub.Draw( gfx );
@@ -265,6 +247,8 @@ function Draw()
 	// 	gfx.DrawRect( Vec2( x.x,x.y ),
 	// 		Vec2( x.width,x.height ),"orange" );
 	// }
+	
+	pauseButton.Draw( gfx );
 }
 
 function Pause()

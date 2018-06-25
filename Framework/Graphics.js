@@ -171,4 +171,11 @@ function Graphics()
 		ctx.lineTo( pos2.x,pos2.y );
 		ctx.stroke();
 	}
+	
+	this.GetBigScreenRect=()=>
+	{
+		return( Rect( -64,-64,
+			this.ScreenWidth + 128,
+			this.ScreenHeight + 128 ) );
+	}
 }

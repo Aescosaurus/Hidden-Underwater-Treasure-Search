@@ -59,3 +59,18 @@ FishAI.Shoot = function( bulletVec )
 		}
 	}
 }
+
+FishAI.Follow = function()
+{
+	const speed = 10;
+	// 
+	this.Go=( pos,moveAmount,playerPos,gfx )=>
+	{
+		if( gfx.ScreenRect.Contains( pos ) )
+		{
+			const diff = playerPos.GetSubtracted( pos );
+			
+			pos.Add( diff.GetNormalized() * speed );
+		}
+	}
+}

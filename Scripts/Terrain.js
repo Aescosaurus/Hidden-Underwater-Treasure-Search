@@ -2,7 +2,8 @@ function Terrain( gfx,area,level = 1 )
 {
 	Terrain.prototype.images =
 	[
-		gfx.LoadImage( "Images/Tile1.png" )
+		gfx.LoadImage( "Images/Tile1.png" ),
+		gfx.LoadImage( "Images/Tile2.png" )
 	];
 	Terrain.prototype.tileSize = 16;
 	const pos = Vec2( area.x,area.y );
@@ -27,8 +28,11 @@ function Terrain( gfx,area,level = 1 )
 		{
 			for( let x = pos.x; x < pos.x + size.x - tS; x += tS * 2 )
 			{
-				gfx.DrawImage( Terrain.prototype.images[level - 1],
-					Vec2( x,y ),Vec2( tS * 2,tS * 2 )  );
+				if( gfx.GetBigScreenRect().Contains( Vec2( x,y ) ) )
+				{
+					gfx.DrawImage( Terrain.prototype.images[level - 1],
+						Vec2( x,y ),Vec2( tS * 2,tS * 2 )  );
+				}
 			}
 		}
 		// for( let y = pos.y;

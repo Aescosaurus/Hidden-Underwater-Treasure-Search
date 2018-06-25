@@ -104,6 +104,16 @@
 		if( keyMap[90] )
 		{
 			mode = "terrain";
+			// if( Math.floor( moveOffset.x ) %
+			// 	gridSize * 2 != 0 )
+			// {
+			// 	moveOffset.x -= gridSize;
+			// }
+			// if( Math.floor( moveOffset.y ) %
+			// 	gridSize * 2 != 0 )
+			// {
+			// 	moveOffset.y -= gridSize;
+			// }
 			console.log( "Terrain Mode" );
 		}
 		else if( keyMap[88] )
@@ -176,8 +186,8 @@
 		
 		{
 			const origOffset = moveOffset.Clone();
-			let speed = gridSize;
-			if( mode == "terrain" ) speed *= 2;
+			let speed = gridSize * 2;
+			// if( mode == "terrain" ) speed *= 2;
 			
 			if( keyMap[38] || keyMap[87] )
 			{
@@ -230,7 +240,8 @@
 				
 				const tempRect = { x: tempStart.x + moveOffset.x,
 					y: tempStart.y + moveOffset.y,
-					w: tempSize.x,h: tempSize.y };
+					w: tempSize.x,h: tempSize.y,
+					level: terrainLevel };
 				
 				terrain.push( tempRect );
 				
@@ -345,7 +356,12 @@
 				te.y - moveOffset.y,
 				te.w,te.h );
 			
-			cc.fillStyle = "gray";
+			switch( te.level )
+			{
+			case 1: cc.fillStyle = "yellow"; break;
+			case 2: cc.fillStyle = "blue"; break;
+			default: cc.fillStyle = "magenta"; break;
+			}
 			cc.fillRect( te.x - moveOffset.x + edge,
 				te.y - moveOffset.y + edge,
 				te.w - edge * 2,te.h - edge * 2 );

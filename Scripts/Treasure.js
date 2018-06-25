@@ -1,16 +1,27 @@
 function Treasure( gfx,x,y,price )
 {
+	const GetImageFromPrice=()=>
+	{
+		switch( price )
+		{
+		case 10: return 0; break;
+		case 20: return 1; break;
+		case 50: return 2; break;
+		default: return 0; break;
+		}
+	}
+	// 
 	Treasure.prototype.images =
 	[
-		"Images/Treasure1.png"
+		gfx.LoadImage( "Images/Treasure1.png" ),
+		gfx.LoadImage( "Images/Treasure2.png" ),
+		gfx.LoadImage( "Images/Treasure3.png" )
 	];
 	const size = Vec2( 64,64 );
 	const pos = Vec2( x,y - size.y / 2 );
 	const val = price;
 	let willDelete = false;
-	// TODO: Determine image from price.
-	const image = gfx.LoadImage( Treasure.prototype
-		.images[Math.floor( price / 10 ) - 1] );
+	const image = Treasure.prototype.images[GetImageFromPrice()];
 	// 
 	this.Update=( moveAmount )=>
 	{
