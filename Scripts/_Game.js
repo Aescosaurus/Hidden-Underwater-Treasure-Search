@@ -107,6 +107,13 @@ function Update()
 	sub.Update( kbd );
 	sub.DoTorpedoStuff( torpedoes,world.GetEnemies() );
 	
+	if( moveAmount.y > 200 )
+	{
+		// moveAmount.y -= 0.1;
+		sub.MoveAwayFrom( sub.GetPos().GetAdded( Vec2( 0,1 ) ) );
+		// sub.ResetDelta();
+	}
+	
 	moveAmount.Add( sub.GetDelta() );
 	
 	// if( moveAmount.y > 210 )
