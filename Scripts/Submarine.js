@@ -1,4 +1,4 @@
-function Submarine( x,y,shop,gfx )
+function Submarine( x,y,shop,comboHand,scoreManager,gfx )
 {
 	const ReverseVel=()=>
 	{
@@ -39,18 +39,18 @@ function Submarine( x,y,shop,gfx )
 	const slowdown = 0.95;
 	const maxMaxSpeed = 6.5;
 	const maxVel = 0.7;
-	const invul = new Timer( 36 );
+	const invul = new Timer( 62 );
 	let isInvul = false;
 	const hpBar = new HealthBar( 5,Vec2( 5,5 ) );
 	// const image = gfx.LoadImage( "Images/Sub1.png" );
 	const anim = new Anim( "Images/Sub",1,4,12,gfx );
 	const hurtAnim = new Anim( "Images/SubHurt",1,2,4,gfx );
-	const torpedoTimer = new Timer( 32.4,true );
+	const torpedoTimer = new Timer( 24.4,true );
 	const range = 100;
 	const maxRange = 350;
 	let maxFuel = 150;
 	const maxMaxFuel = 1350;
-	const fuelBar = new HealthBar( GetMaxFuel(),Vec2( 5,30 ) );
+	const fuelBar = new HealthBar( GetMaxFuel(),Vec2( 5,35 ) );
 	// 
 	this.Update=( kbd )=>
 	{
@@ -164,6 +164,9 @@ function Submarine( x,y,shop,gfx )
 			
 			if( curTreasure.GetRect().Overlaps( hitbox ) )
 			{
+				scoreManager.AddScore( curTreasure.GetVal() * 10 );
+				comboHand.AddAndRefresh();
+				
 				score += curTreasure.Collect();
 			}
 		}
@@ -244,6 +247,8 @@ function Submarine( x,y,shop,gfx )
 		{
 			hpBar.LoseHP( amount );
 			isInvul = true;
+			
+			comboHand.Reset();
 		}
 	}
 	

@@ -6,4 +6,5 @@ function Timer( time,finished = false )
 	this.Update=()=> { ++curTime; }
 	this.Reset=()=> { curTime = 0.0; }
 	this.IsDone=()=> { return( curTime >= maxTime ); }
+	this.GetPercent=()=> { return( curTime / maxTime ); }
 }

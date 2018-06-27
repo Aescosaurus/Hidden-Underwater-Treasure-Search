@@ -9,13 +9,16 @@ const sfx = new Sound();
 
 const ct = new ColorTransformer();
 
+const combo = new ComboHandler( gfx );
+let scoreMgr = new ScoreManager( combo );
+
 const menu = new Menu( gfx,sfx,ct );
 let menuActive = true;
 const shop = new UpgradeShop( ct,gfx );
 let shopActive = false;
 
-const sub = new Submarine( 60,60,shop,gfx );
-const world = new Map( shop );
+const sub = new Submarine( 60,60,shop,combo,scoreMgr,gfx );
+const world = new Map( shop,scoreMgr );
 
 let gold = 10;
 let moveAmount = Vec2( 0,0 );
@@ -27,6 +30,9 @@ let paused = false;
 const pauseButton = new ImageButton( gfx.ScreenWidth - 40,8,
 	32,32,gfx.LoadImage( "Images/PauseButton1.png" ),
 	gfx.LoadImage( "Images/PauseButton2.png" ) );
+
+const goldImg = gfx.LoadImage( "Images/CoinIcon.png" );
+const pntsImg = gfx.LoadImage( "Images/PointsIcon.png" );
 
 window.onload = function()
 {
@@ -141,7 +147,7 @@ function Update()
 		sub.Hurt( 999 );
 	}
 	
-	gold += world.Update( sub.GetPos(),gfx,torpedoes );
+	gold += world.Update( sub.GetPos(),gfx,torpedoes,combo );
 	
 	const subRect = sub.GetRect();
 	for( var eb in enemyBullets )
@@ -193,6 +199,8 @@ function Update()
 		menuActive = false;
 		shopActive = true;
 	}
+	
+	combo.Update();
 }
 
 function Draw()
@@ -209,9 +217,14 @@ function Draw()
 	if( shopActive )
 	{
 		shop.Draw( gfx,ms );
-	
-		gfx.DrawText( Vec2( 115,25 ),"25PX Lucida Console",
+		
+		gfx.DrawImage( goldImg,Vec2( 115,0 ),Vec2( 32,32 ) );
+		gfx.DrawText( Vec2( 150,24 ),"25PX Lucida Console",
 			"#FFC825",gold );
+		
+		gfx.DrawImage( pntsImg,Vec2( 275,0 ),Vec2( 32,32 ) );
+		gfx.DrawText( Vec2( 320,24 ),"25PX Lucida Console",
+			"#99E65F",scoreMgr.GetScore() );
 		
 		return;
 	}
@@ -238,8 +251,15 @@ function Draw()
 	
 	sub.Draw( gfx );
 	
-	gfx.DrawText( Vec2( 115,25 ),"25PX Lucida Console",
+	combo.Draw( gfx );
+	
+	gfx.DrawImage( goldImg,Vec2( 115,0 ),Vec2( 32,32 ) );
+	gfx.DrawText( Vec2( 150,24 ),"25PX Lucida Console",
 		"#FFC825",gold );
+		
+	gfx.DrawImage( pntsImg,Vec2( 275,0 ),Vec2( 32,32 ) );
+	gfx.DrawText( Vec2( 320,24 ),"25PX Lucida Console",
+		"#99E65F",scoreMgr.GetScore() );
 	
 	// for( var i in world.GetTerrainRects() )
 	// {
@@ -264,7 +284,13 @@ function PartialReset()
 	moveAmount = Vec2( 0,0 );
 	sub.Reset();
 	
-	world.Reset();
-	world.InitWorld( gfx,enemyBullets );
+	for( let i = 0; i < 2; ++i )
+	{
+		world.Reset();
+		world.InitWorld( gfx,enemyBullets );
+	}
+	
+	combo.Reset();
+	scoreMgr.Reset();
 }
 })();

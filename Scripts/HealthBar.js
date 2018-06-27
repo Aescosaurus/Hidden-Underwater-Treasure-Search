@@ -13,23 +13,15 @@ function HealthBar( maxHP,startPos )
 		}
 	}
 	
-	this.LoseHP=( amount )=>
-	{
-		curHP -= amount;
-	}
+	this.LoseHP=( amount )=> { curHP -= amount; }
 	
-	this.Reset=()=>
-	{
-		curHP = max;
-	}
+	this.Reset=()=> { curHP = max; }
 	
-	this.SetMax=( amount )=>
-	{
-		max = amount;
-	}
+	this.SetMax=( amount )=> { max = amount; }
 	
-	this.GetHP=()=>
-	{
-		return( curHP );
-	}
+	this.SetCur=( amount )=> { curHP = amount; }
+	
+	this.GetHP=()=> { return( curHP ); }
+	
+	this.GetMax=()=> { return( max ); }
 }

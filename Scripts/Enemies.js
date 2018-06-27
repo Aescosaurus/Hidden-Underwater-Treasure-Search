@@ -66,17 +66,17 @@ function Enemy( x,y,ai,imgNum,health,val )
 function Fish( x,y,bullets,gfx )
 {
 	Enemy.call( this,x,y,new FishAI.Patrol(),
-		gfx.LoadImage( "Images/Enemy.png" ),5,10 );
+		gfx.LoadImage( "Images/Enemy.png" ),5,30 );
 }
 
 function Squid( x,y,bullets,gfx )
 {
 	Enemy.call( this,x,y,new FishAI.Shoot( bullets ),
-		gfx.LoadImage( "Images/Enemy.png" ),3,5 );
+		gfx.LoadImage( "Images/Enemy.png" ),3,20 );
 }
 
 function Jelly( x,y,bullets,gfx )
 {
 	Enemy.call( this,x,y,new FishAI.Follow(),
-		gfx.LoadImage( "Images/Enemy.png" ),4,5 );
+		gfx.LoadImage( "Images/Enemy.png" ),4,15 );
 }

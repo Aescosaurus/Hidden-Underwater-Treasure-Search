@@ -1,4 +1,4 @@
-function Map( shop )
+function Map( shop,scoreManager )
 {
 	const terrain = [];
 	const treasures = [];
@@ -28,7 +28,7 @@ function Map( shop )
 		}
 	}
 	
-	this.Update=( playerPos,gfx,torpedoes )=>
+	this.Update=( playerPos,gfx,torpedoes,combo )=>
 	{
 		let bal = 0;
 		
@@ -48,6 +48,8 @@ function Map( shop )
 			
 			if( enemies[e].IsDead() )
 			{
+				scoreManager.AddScore( enemies[e].GetPrice() * 10 );
+				combo.AddAndRefresh();
 				bal += enemies[e].GetPrice();
 				enemies.splice( e,1 );
 			}

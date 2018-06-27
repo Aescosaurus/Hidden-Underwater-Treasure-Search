@@ -50,8 +50,9 @@ function Treasure( gfx,x,y,price )
 	
 	this.GetRect=()=>
 	{
-		return( Rect( pos.x,pos.y + size.y / 2,
-			size.x,size.y / 2 ) );
+		// return( Rect( pos.x,pos.y + size.y / 2,
+		// 	size.x,size.y / 2 ) );
+		return( Rect( pos.x,pos.y,size.x,size.y ) );
 	}
 	
 	this.GetVal=()=>
