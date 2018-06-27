@@ -3,7 +3,7 @@ function HealthBar( maxHP,startPos )
 	let max = maxHP;
 	let curHP = maxHP;
 	// 
-	this.Draw=( width,height,gfx,color = "red" )=>
+	this.Draw=( width,height,gfx,color = "#FF0040" )=>
 	{
 		if( curHP > 0 )
 		{

@@ -3,7 +3,7 @@ function Map( shop )
 	const terrain = [];
 	const treasures = [];
 	const enemies = [];
-	const maxSubDmg = 14;
+	const maxSubDmg = 6;
 	// 
 	this.InitWorld=( gfx,bullets )=>
 	{
@@ -30,6 +30,8 @@ function Map( shop )
 	
 	this.Update=( playerPos,gfx,torpedoes )=>
 	{
+		let bal = 0;
+		
 		for( var e in enemies )
 		{
 			enemies[e].Update( playerPos,gfx );
@@ -43,7 +45,15 @@ function Map( shop )
 					torpedoes[tp].Kill();
 				}
 			}
+			
+			if( enemies[e].IsDead() )
+			{
+				bal += enemies[e].GetPrice();
+				enemies.splice( e,1 );
+			}
 		}
+		
+		return( bal );
 	}
 	
 	this.Draw=( gfx )=>

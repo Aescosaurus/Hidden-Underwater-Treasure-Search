@@ -1,7 +1,7 @@
-function Timer( time )
+function Timer( time,finished = false )
 {
 	const maxTime = time;
-	let curTime = 0.0;
+	let curTime = ( finished ? time : 0.0 );
 	// 
 	this.Update=()=> { ++curTime; }
 	this.Reset=()=> { curTime = 0.0; }

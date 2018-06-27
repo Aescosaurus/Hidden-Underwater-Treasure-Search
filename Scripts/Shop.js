@@ -61,14 +61,13 @@ function UpgradeShop( ct,gfx )
 		
 		drawPrice = 0;
 		
+		if( uEngine.IsHovering() )
+		{
+			drawPrice = engRange.GetPrice( maxPrice );
+		}
 		if( money > engRange.GetPrice( maxPrice ) &&
 			!engRange.IsAtMax() )
 		{
-			if( uEngine.IsHovering() )
-			{
-				drawPrice = engRange.GetPrice( maxPrice );
-			}
-			
 			if( uEngine.IsPressed() )
 			{
 				const price = engRange.GetPrice( maxPrice );
@@ -78,14 +77,13 @@ function UpgradeShop( ct,gfx )
 		}
 		else uEngine.Reset();
 		
+		if( uDamage.IsHovering() )
+		{
+			drawPrice = dmgRange.GetPrice( maxPrice );
+		}
 		if( money > dmgRange.GetPrice( maxPrice ) &&
 			!dmgRange.IsAtMax() )
 		{
-			if( uDamage.IsHovering() )
-			{
-				drawPrice = dmgRange.GetPrice( maxPrice );
-			}
-			
 			if( uDamage.IsPressed() )
 			{
 				const price = dmgRange.GetPrice( maxPrice );
@@ -95,14 +93,13 @@ function UpgradeShop( ct,gfx )
 		}
 		else uDamage.Reset();
 		
+		if( uRange.IsHovering() )
+		{
+			drawPrice = rngRange.GetPrice( maxPrice );
+		}
 		if( money > rngRange.GetPrice( maxPrice ) &&
 			!rngRange.IsAtMax() )
 		{
-			if( uRange.IsHovering() )
-			{
-				drawPrice = rngRange.GetPrice( maxPrice );
-			}
-			
 			if( uRange.IsPressed() )
 			{
 				const price = rngRange.GetPrice( maxPrice );
@@ -112,14 +109,13 @@ function UpgradeShop( ct,gfx )
 		}
 		else uRange.Reset();
 		
+		if( uFuel.IsHovering() )
+		{
+			drawPrice = fUlRange.GetPrice( maxPrice );
+		}
 		if( money > fUlRange.GetPrice( maxPrice ) &&
 			!fUlRange.IsAtMax() )
 		{
-			if( uFuel.IsHovering() )
-			{
-				drawPrice = fUlRange.GetPrice( maxPrice );
-			}
-			
 			if( uFuel.IsPressed() )
 			{
 				const price = fUlRange.GetPrice( maxPrice );

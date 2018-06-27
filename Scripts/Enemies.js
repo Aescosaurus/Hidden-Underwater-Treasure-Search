@@ -1,5 +1,5 @@
 // Pls don't initialize this directly.
-function Enemy( x,y,ai,imgNum,health )
+function Enemy( x,y,ai,imgNum,health,val )
 {
 	const myImg = imgNum;
 	const size = Vec2( 64,64 );
@@ -51,14 +51,32 @@ function Enemy( x,y,ai,imgNum,health )
 	{
 		return( this.GetRect().Overlaps( gfx.ScreenRect ) );
 	}
+	
+	this.IsDead=()=>
+	{
+		return( hp < 1 );
+	}
+	
+	this.GetPrice=()=>
+	{
+		return( val );
+	}
 }
 
 function Fish( x,y,bullets,gfx )
 {
-	Enemy.call( this,x,y,new FishAI.Patrol(),gfx.LoadImage( "Images/Enemy.png" ),14 );
+	Enemy.call( this,x,y,new FishAI.Patrol(),
+		gfx.LoadImage( "Images/Enemy.png" ),5,10 );
 }
 
 function Squid( x,y,bullets,gfx )
 {
-	Enemy.call( this,x,y,new FishAI.Shoot( bullets ),gfx.LoadImage( "Images/Enemy.png" ),10 );
+	Enemy.call( this,x,y,new FishAI.Shoot( bullets ),
+		gfx.LoadImage( "Images/Enemy.png" ),3,5 );
+}
+
+function Jelly( x,y,bullets,gfx )
+{
+	Enemy.call( this,x,y,new FishAI.Follow(),
+		gfx.LoadImage( "Images/Enemy.png" ),4,5 );
 }

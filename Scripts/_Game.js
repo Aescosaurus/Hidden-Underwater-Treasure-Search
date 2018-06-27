@@ -17,7 +17,7 @@ let shopActive = false;
 const sub = new Submarine( 60,60,shop,gfx );
 const world = new Map( shop );
 
-let gold = 1560;
+let gold = 10;
 let moveAmount = Vec2( 0,0 );
 
 const enemyBullets = [];
@@ -141,7 +141,7 @@ function Update()
 		sub.Hurt( 999 );
 	}
 	
-	world.Update( sub.GetPos(),gfx,torpedoes );
+	gold += world.Update( sub.GetPos(),gfx,torpedoes );
 	
 	const subRect = sub.GetRect();
 	for( var eb in enemyBullets )
@@ -211,7 +211,7 @@ function Draw()
 		shop.Draw( gfx,ms );
 	
 		gfx.DrawText( Vec2( 115,25 ),"25PX Lucida Console",
-			"gold",gold );
+			"#FFC825",gold );
 		
 		return;
 	}
@@ -239,7 +239,7 @@ function Draw()
 	sub.Draw( gfx );
 	
 	gfx.DrawText( Vec2( 115,25 ),"25PX Lucida Console",
-		"gold",gold );
+		"#FFC825",gold );
 	
 	// for( var i in world.GetTerrainRects() )
 	// {

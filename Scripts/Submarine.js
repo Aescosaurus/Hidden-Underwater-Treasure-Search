@@ -44,7 +44,8 @@ function Submarine( x,y,shop,gfx )
 	const hpBar = new HealthBar( 5,Vec2( 5,5 ) );
 	// const image = gfx.LoadImage( "Images/Sub1.png" );
 	const anim = new Anim( "Images/Sub",1,4,12,gfx );
-	const torpedoTimer = new Timer( 52.4 );
+	const hurtAnim = new Anim( "Images/SubHurt",1,2,4,gfx );
+	const torpedoTimer = new Timer( 32.4,true );
 	const range = 100;
 	const maxRange = 350;
 	let maxFuel = 150;
@@ -59,6 +60,7 @@ function Submarine( x,y,shop,gfx )
 			pos.y -= surfaceSpeed;
 			vel.Set( 0,0 );
 			moveAmount.Add( Vec2( 0,-surfaceSpeed ) );
+			hurtAnim.Reset();
 		}
 		
 		const vv = GetVel();
@@ -80,6 +82,7 @@ function Submarine( x,y,shop,gfx )
 		
 		if( isInvul )
 		{
+			hurtAnim.Update();
 			invul.Update();
 			
 			if( invul.IsDone() )
@@ -88,6 +91,7 @@ function Submarine( x,y,shop,gfx )
 				isInvul = false;
 			}
 		}
+		else hurtAnim.Reset();
 		
 		const curSpd = vel.GetLengthSq() / 50.0;
 		if( curSpd != 0 )
@@ -105,19 +109,25 @@ function Submarine( x,y,shop,gfx )
 		gfx.DrawHollowCircle( pos,GetRange(),"white" );
 		if( isInvul )
 		{
-			gfx.DrawRect( pos
+			// gfx.DrawRect( pos
+			// 	.GetSubtracted( size.GetDivided( 2 ) ),
+			// 	size,"blue" );
+			hurtAnim.Draw( pos
 				.GetSubtracted( size.GetDivided( 2 ) ),
-				size,"blue" );
+				size,gfx );
 		}
-		// gfx.DrawImage( image,pos
-		// 		.GetSubtracted( size.GetDivided( 2 ) ),
-		// 		size );
-		anim.Draw( pos
-			.GetSubtracted( size.GetDivided( 2 ) ),
-			size,gfx );
+		else
+		{
+			// gfx.DrawImage( image,pos
+			// 		.GetSubtracted( size.GetDivided( 2 ) ),
+			// 		size );
+			anim.Draw( pos
+				.GetSubtracted( size.GetDivided( 2 ) ),
+				size,gfx );
+		}
 		
 		hpBar.Draw( 100,20,gfx );
-		fuelBar.Draw( 100,20,gfx,"orange" );
+		fuelBar.Draw( 100,20,gfx,"#FFA214" );
 	}
 	
 	this.CheckGroundHits=( groundArr )=>

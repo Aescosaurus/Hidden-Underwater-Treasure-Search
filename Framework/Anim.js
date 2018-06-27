@@ -25,4 +25,9 @@ function Anim( name,first,last,fps,gfx )
 	{
 		gfx.DrawImage( images[Math.floor( spot )],pos,size );
 	}
+	
+	this.Reset=()=>
+	{
+		spot = 0;
+	}
 }
