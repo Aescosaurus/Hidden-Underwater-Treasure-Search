@@ -20,7 +20,7 @@ let shopActive = false;
 const sub = new Submarine( 60,60,shop,combo,scoreMgr,gfx );
 const world = new Map( shop,scoreMgr );
 
-let gold = 10;
+let gold = 10000;
 let moveAmount = Vec2( 0,0 );
 
 const enemyBullets = [];

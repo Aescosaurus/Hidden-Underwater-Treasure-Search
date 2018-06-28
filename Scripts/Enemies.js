@@ -13,6 +13,8 @@ function Enemy( x,y,ai,imgNum,health,val )
 		ai.Go( pos,moveAmount,playerPos,gfx );
 	}
 	
+	this.Update2=()=> { return; }
+	
 	this.Draw=( gfx )=>
 	{
 		// gfx.DrawRect( pos,size,"red" );
@@ -23,6 +25,8 @@ function Enemy( x,y,ai,imgNum,health,val )
 		// gfx.DrawRect( Vec2( r.x,r.y ),
 		// 	Vec2( r.width,r.height ),"#0F0" );
 	}
+	
+	this.Draw2=( gfx )=> { return; }
 	
 	this.MoveBy=( amount )=>
 	{
@@ -35,10 +39,9 @@ function Enemy( x,y,ai,imgNum,health,val )
 		hp -= amount;
 	}
 	
-	this.GetPos=()=>
-	{
-		return( pos.Clone() );
-	}
+	this.GetPos=()=> { return( pos.Clone() ); }
+	
+	this.GetSize=()=> { return( size.Clone() ); }
 	
 	this.GetRect=()=>
 	{
@@ -72,7 +75,21 @@ function Fish( x,y,bullets,gfx )
 function Squid( x,y,bullets,gfx )
 {
 	Enemy.call( this,x,y,new FishAI.Shoot( bullets ),
-		gfx.LoadImage( "Images/Enemy.png" ),3,20 );
+		gfx.LoadImage( "Images/EyeBase.png" ),3,20 );
+	const anim = new Anim( "Images/EyeDecor",1,1,12,gfx );
+	// This is kinda like an overload, but is really
+	//  reassigning the property.
+	this.Update2=()=>
+	{
+		anim.Update();
+	}
+	
+	this.Draw2=( gfx )=>
+	{
+		anim.Draw( this.GetPos().GetSubtracted( this
+			.GetSize() ),
+			this.GetSize().GetMultiplied( 2 ),gfx );
+	}
 }
 
 function Jelly( x,y,bullets,gfx )

@@ -35,6 +35,7 @@ function Map( shop,scoreManager )
 		for( var e in enemies )
 		{
 			enemies[e].Update( playerPos,gfx );
+			enemies[e].Update2();
 			
 			for( var tp in torpedoes )
 			{
@@ -73,6 +74,7 @@ function Map( shop,scoreManager )
 		for( var e in enemies )
 		{
 			enemies[e].Draw( gfx );
+			enemies[e].Draw2( gfx );
 		}
 	}
 	

@@ -155,7 +155,7 @@ function UpgradeShop( ct,gfx )
 		uFuel.Draw( gfx );
 		DrawBar( uFuel,fUlRange );
 		
-		if( drawPrice != 0 )
+		if( drawPrice != 0 && drawPrice != 260 )
 		{
 			gfx.DrawText( ms.GetPos(),"25PX Lucida Console",
 				"#FFC825","Price: " + drawPrice );
