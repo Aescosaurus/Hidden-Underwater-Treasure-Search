@@ -2,7 +2,7 @@
 function Enemy( x,y,ai,imgNum,health,val )
 {
 	const myImg = imgNum;
-	const size = Vec2( 64,64 );
+	const size = Vec2( 32,32 );
 	const pos = Vec2( x,y );
 	const myAI = ai;
 	let moveAmount = Vec2( 0,0 );
@@ -69,7 +69,20 @@ function Enemy( x,y,ai,imgNum,health,val )
 function Fish( x,y,bullets,gfx )
 {
 	Enemy.call( this,x,y,new FishAI.Patrol(),
-		gfx.LoadImage( "Images/Enemy.png" ),5,30 );
+		gfx.LoadImage( "Images/Blank.png" ),5,30 );
+	const anim = new Anim( "Images/Enemy",1,3,8,gfx );
+	// 
+	this.Update2=()=>
+	{
+		anim.Update();
+	}
+	
+	this.Draw2=( gfx )=>
+	{
+		anim.Draw( this.GetPos().GetSubtracted( this
+			.GetSize() ),
+			this.GetSize().GetMultiplied( 2 ),gfx );
+	}
 }
 
 function Squid( x,y,bullets,gfx )

@@ -5,7 +5,7 @@ function ParallaxHandler( gfx )
 	this.Draw=( moveAmount,gfx )=>
 	{
 		gfx.DrawImage( img,
-			Vec2( moveAmount.x * 1.2,moveAmount.y * 1.02 ),
+			Vec2( moveAmount.x * 0.02,moveAmount.y * 0.01 ),
 			gfx.ScreenSize );
 	}
 }
