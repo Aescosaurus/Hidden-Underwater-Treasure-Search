@@ -42,7 +42,7 @@ FishAI.Patrol = function( speed = 2,dist = 70 )
 	}
 }
 
-FishAI.Shoot = function( bulletVec )
+FishAI.Shoot = function( bulletVec,gfx )
 {
 	const refireTimer = new Timer( 72.4 );
 	// 
@@ -55,7 +55,7 @@ FishAI.Shoot = function( bulletVec )
 			refireTimer.Reset();
 			
 			bulletVec.push( new Bullet( pos.x,pos.y,
-				playerPos ) );
+				playerPos,gfx ) );
 		}
 	}
 }

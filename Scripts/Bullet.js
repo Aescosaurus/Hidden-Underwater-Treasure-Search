@@ -1,4 +1,4 @@
-function Bullet( x,y,target )
+function Bullet( x,y,target,gfx )
 {
 	const speed = 4.3;
 	const pos = Vec2( x,y );
@@ -6,18 +6,24 @@ function Bullet( x,y,target )
 		.GetMultiplied( -speed );
 	const size = Vec2( 16,16 );
 	let dead = false;
+	const pulse = new Anim( "Images/Bullet",1,2,5,gfx );
 	// 
 	this.Update=( moveAmount )=>
 	{
 		pos.Add( vel );
 		pos.Add( moveAmount );
+		
+		pulse.Update();
 	}
 	
 	this.Draw=( gfx )=>
 	{
-		gfx.DrawRect( pos
+		// gfx.DrawRect( pos
+		// 	.GetSubtracted( size.GetDivided( 2 ) ),
+		// 	size,"red" );
+		pulse.Draw( pos
 			.GetSubtracted( size.GetDivided( 2 ) ),
-			size,"red" );
+			size,gfx );
 		
 		if( !this.GetRect()
 			.Overlaps( gfx.ScreenRect ) )

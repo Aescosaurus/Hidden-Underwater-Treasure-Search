@@ -227,7 +227,7 @@ function Submarine( x,y,shop,comboHand,scoreManager,gfx )
 					GetRange() * GetRange() + 64 * 64 &&
 					e.IsOnScreen( gfx ) )
 				{
-					torpedoVec.push( new Torpedo( pos.x,pos.y ) );
+					torpedoVec.push( new Torpedo( pos.x,pos.y,gfx ) );
 					
 					break;
 				}
