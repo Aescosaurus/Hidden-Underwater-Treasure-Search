@@ -8,6 +8,7 @@ const ms = new Mouse();
 const sfx = new Sound();
 
 const ct = new ColorTransformer();
+const ph = new ParallaxHandler( gfx );
 
 const combo = new ComboHandler( gfx );
 let scoreMgr = new ScoreManager( combo );
@@ -211,6 +212,7 @@ function Draw()
 		.GetSubtracted( Vec2( 0,gfx.ScreenHeight ) ),
 		gfx.ScreenSize,/*ct.Transform2( "#48A" )*/
 		ct.GetSkyColor() );
+	ph.Draw( moveAmount,gfx );
 	
 	// if( kbd.KeyDown( ' ' ) ) return;
 	
