@@ -89,7 +89,7 @@ function Squid( x,y,bullets,gfx )
 {
 	Enemy.call( this,x,y,new FishAI.Shoot( bullets,gfx ),
 		gfx.LoadImage( "Images/EyeBase.png" ),3,20 );
-	const anim = new Anim( "Images/EyeDecor",1,1,12,gfx );
+	const anim = new Anim( "Images/EyeDecor",1,2,6,gfx );
 	// This is kinda like an overload, but is really
 	//  reassigning the property.
 	this.Update2=()=>
