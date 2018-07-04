@@ -57,6 +57,7 @@ function Start()
 
 function Update()
 {
+	console.log( moveAmount );
 	// if( kbd.KeyDown( ' ' ) ) return;
 	
 	if( shopActive )

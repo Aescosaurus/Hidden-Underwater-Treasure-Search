@@ -40,6 +40,8 @@ FishAI.Patrol = function( speed = 2,dist = 70 )
 		if( pos.x > startPos.x + moveDist ) dir = -1;
 		else if( pos.x < startPos.x - moveDist ) dir = 1;
 	}
+	
+	this.GetVel=()=> { return( Vec2( dir,0 ) ); }
 }
 
 FishAI.Shoot = function( bulletVec,gfx )

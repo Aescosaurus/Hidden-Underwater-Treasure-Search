@@ -55,33 +55,41 @@ function Enemy( x,y,ai,imgNum,health,val )
 		return( this.GetRect().Overlaps( gfx.ScreenRect ) );
 	}
 	
-	this.IsDead=()=>
-	{
-		return( hp < 1 );
-	}
+	this.IsDead=()=> { return( hp < 1 ); }
 	
-	this.GetPrice=()=>
-	{
-		return( val );
-	}
+	this.GetPrice=()=> { return( val );	}
+	
+	this.GetVel=()=> { return( ai.GetVel() ); }
 }
 
 function Fish( x,y,bullets,gfx )
 {
 	Enemy.call( this,x,y,new FishAI.Patrol(),
 		gfx.LoadImage( "Images/Blank.png" ),5,30 );
-	const anim = new Anim( "Images/Enemy",1,3,8,gfx );
+	const anim = new Anim( "Images/Enemy",1,4,8,gfx );
+	const backwards = new Anim( "Images/EnemyB",1,4,8,gfx );
+	let lastPos = Vec2( 0,0 );
 	// 
 	this.Update2=()=>
 	{
 		anim.Update();
+		backwards.Update();
 	}
 	
 	this.Draw2=( gfx )=>
 	{
-		anim.Draw( this.GetPos().GetSubtracted( this
-			.GetSize() ),
-			this.GetSize().GetMultiplied( 2 ),gfx );
+		if( this.GetVel().x < 0.0 )
+		{
+			anim.Draw( this.GetPos().GetSubtracted( this
+				.GetSize() ),
+				this.GetSize().GetMultiplied( 2 ),gfx );
+		}
+		else
+		{
+			backwards.Draw( this.GetPos().GetSubtracted( this
+				.GetSize() ),
+				this.GetSize().GetMultiplied( 2 ),gfx );
+		}
 	}
 }
 

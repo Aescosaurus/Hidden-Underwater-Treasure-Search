@@ -1,16 +1,12 @@
 function ParallaxHandler( gfx )
 {
 	const img1 = gfx.LoadImage( "Images/Background1.png" );
-	const img2 = gfx.LoadImage( "Images/Background2.png" );
+	const move = Vec2( 700.0 / 6500.0,700.0 / 4500.0 );
 	// 
 	this.Draw=( moveAmount,gfx )=>
 	{
-		return;
 		gfx.DrawImage( img1,
-			Vec2( moveAmount.x * 0.02,moveAmount.y * 0.01 ),
-			gfx.ScreenSize.GetMultiplied( 2 ) );
-		gfx.DrawImage( img2,
-			Vec2( moveAmount.x * 1.2,moveAmount.y * 0.01 ),
-			Vec2( gfx.ScreenWidth * 4,gfx.ScreenHeight * 2 ) );
+			Vec2( moveAmount.x * move.x,moveAmount.y * move.y ),
+			Vec2( gfx.ScreenWidth * 2,gfx.ScreenHeight * 2 ) );
 	}
 }
