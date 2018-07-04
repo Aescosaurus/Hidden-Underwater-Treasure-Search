@@ -98,7 +98,7 @@ function Submarine( x,y,shop,comboHand,scoreManager,gfx )
 		{
 			anim.Update( curSpd );
 			
-			fuelBar.LoseHP( curSpd );
+			fuelBar.LoseHP( curSpd / 2 );
 		}
 	}
 	
@@ -297,7 +297,7 @@ function Submarine( x,y,shop,comboHand,scoreManager,gfx )
 	{
 		return( Rect( pos.x - size.x / 2,
 			pos.y - size.y / 2,
-			size.x,size.y ) );
+			size.x,size.y ).GetExpanded( -5 ) );
 	}
 	
 	this.HasToSurface=()=>

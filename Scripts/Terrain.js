@@ -8,8 +8,6 @@ function Terrain( gfx,area,level = 1 )
 	Terrain.prototype.tileSize = 16;
 	const pos = Vec2( area.x,area.y );
 	const size = Vec2( area.width,area.height );
-	// TODO: Calculate image to use based on dims.
-	// const image = img;
 	// 
 	this.Update=( moveAmount )=>
 	{

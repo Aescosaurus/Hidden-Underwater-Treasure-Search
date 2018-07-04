@@ -3,7 +3,7 @@ function ComboHandler( gfx )
 	const bar = new HealthBar( 10 * 30,
 		Vec2( 10,gfx.ScreenHeight - 14 ) );
 	let scoreMult = 1;
-	const scoreTimer = new Timer( 10.0 * 30 );
+	const scoreTimer = new Timer( 20.0 * 30 );
 	// 
 	this.Update=()=>
 	{
